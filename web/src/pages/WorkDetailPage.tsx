@@ -1,20 +1,28 @@
-import { Link, useParams } from 'react-router'
+import { useParams } from 'react-router'
+import { LinkButton } from '../components/ui/LinkButton.tsx'
+import { Section } from '../components/ui/Section.tsx'
+import { SectionHeader } from '../components/ui/SectionHeader.tsx'
+import { Stack } from '../components/ui/Stack.tsx'
 
 export function WorkDetailPage() {
   const { slug } = useParams()
 
   return (
-    <section className="space-y-4">
-      <h1 className="text-2xl font-medium">Detalle de proyecto</h1>
-      <p className="text-neutral-600">
-        Placeholder de <span className="font-mono">/work/:slug</span>. Slug
-        recibido: {slug}
-      </p>
-      <p>
-        <Link className="underline" to="/work">
+    <Section>
+      <Stack>
+        <SectionHeader
+          heading="h1"
+          eyebrow="Work"
+          title="Detalle de proyecto"
+          description="Placeholder de la ruta de un caso. El contenido final todavía no está."
+        />
+        <p className="font-mono text-small break-all text-text-secondary">
+          {slug}
+        </p>
+        <LinkButton to="/work" variant="ghost" className="w-fit px-0">
           Volver al listado
-        </Link>
-      </p>
-    </section>
+        </LinkButton>
+      </Stack>
+    </Section>
   )
 }

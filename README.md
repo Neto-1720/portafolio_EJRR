@@ -1,6 +1,6 @@
 # Portfolio — Ernesto Jahir Rodríguez Ramírez
 
-Base técnica de un portafolio full stack. El monorepo ya tiene el esquema de datos y la API pública de lectura. Todavía no hay pantallas finales ni admin, y React no consume estos endpoints.
+Base técnica de un portafolio full stack. El monorepo ya tiene el esquema de datos, la API pública de lectura y la base visual de React. Todavía no hay pantallas finales ni admin, y React no consume los endpoints de proyectos, tecnologías ni certificaciones.
 
 ## Arquitectura
 
@@ -16,7 +16,7 @@ Laravel (api/)
 PostgreSQL en Supabase
 ```
 
-El detalle está en [docs/arquitectura.md](docs/arquitectura.md).
+El detalle está en [docs/arquitectura.md](docs/arquitectura.md). Tokens y convenciones de componentes: [docs/ui.md](docs/ui.md).
 
 ## Estructura
 
@@ -24,7 +24,7 @@ El detalle está en [docs/arquitectura.md](docs/arquitectura.md).
 portfolio/
   web/          SPA
   api/          API Laravel
-  docs/         Notas de arquitectura
+  docs/         Arquitectura e interfaz
   README.md
   .gitignore
 ```
@@ -34,9 +34,10 @@ Frontend:
 ```
 web/src/
   app/          router
-  components/   layout
+  components/   ui, layout, content, feedback
+  config/       identidad y enlaces
   features/     comprobación de /api/health
-  pages/        placeholders
+  pages/        placeholders dentro del layout
   services/     cliente HTTP
   hooks/
   types/
@@ -243,4 +244,4 @@ Pest, Vitest y Playwright no están instalados. Entran en una fase posterior.
 
 ## Qué no está en esta base
 
-Pantallas finales, conexión de React con la API, admin, autenticación, Storage, colas, correo y despliegue. Los demos existen solo como tablas y datos ficticios.
+La home final, los case studies, la conexión de React con los GET de proyectos, tecnologías y certificaciones, admin, autenticación, Storage, colas, correo y despliegue. Los demos existen solo como tablas y datos ficticios.

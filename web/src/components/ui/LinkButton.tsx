@@ -1,0 +1,45 @@
+import type { ReactNode } from 'react'
+import { Link } from 'react-router'
+import { cn } from '../../utils/cn.ts'
+
+const variants = {
+  primary: 'bg-accent text-background hover:bg-accent-hover',
+  secondary:
+    'border border-border bg-surface text-text-primary hover:bg-surface-elevated',
+  ghost: 'text-text-secondary hover:text-text-primary',
+}
+
+type LinkButtonProps = {
+  to: string
+  children: ReactNode
+  variant?: keyof typeof variants
+  className?: string
+}
+
+export function LinkButton({
+  to,
+  children,
+  variant = 'secondary',
+  className,
+}: LinkButtonProps) {
+  const classNames = cn(
+    'focus-ring inline-flex h-9 items-center justify-center px-3 text-small transition-colors duration-150 motion-reduce:transition-none',
+    variants[variant],
+    className,
+  )
+  const external = to.startsWith('http') || to.startsWith('mailto:')
+
+  if (external) {
+    return (
+      <a href={to} className={classNames} target="_blank" rel="noreferrer">
+        {children}
+      </a>
+    )
+  }
+
+  return (
+    <Link to={to} className={classNames}>
+      {children}
+    </Link>
+  )
+}

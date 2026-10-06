@@ -1,17 +1,22 @@
-import { Link } from 'react-router'
+import { LinkButton } from '../components/ui/LinkButton.tsx'
+import { Section } from '../components/ui/Section.tsx'
+import { SectionHeader } from '../components/ui/SectionHeader.tsx'
+import { Stack } from '../components/ui/Stack.tsx'
 
 export function WorkPage() {
   return (
-    <section className="space-y-4">
-      <h1 className="text-2xl font-medium">Proyectos</h1>
-      <p className="text-neutral-600">
-        El listado de case studies todavía no está.
-      </p>
-      <p>
-        <Link className="underline" to="/work/ejemplo">
+    <Section>
+      <Stack>
+        <SectionHeader
+          heading="h1"
+          eyebrow="Work"
+          title="Proyectos"
+          description="El listado de case studies todavía no está."
+        />
+        <LinkButton to="/work/ejemplo" variant="ghost" className="w-fit px-0">
           Abrir una ruta de detalle
-        </Link>
-      </p>
-    </section>
+        </LinkButton>
+      </Stack>
+    </Section>
   )
 }

@@ -41,12 +41,16 @@ export function HealthStatus() {
   }, [])
 
   if (state.status === 'loading') {
-    return <p>Comprobando backend…</p>
+    return <p className="text-caption text-text-muted">Comprobando backend…</p>
   }
 
   if (state.status === 'error') {
-    return <p role="alert">{state.message}</p>
+    return (
+      <p role="alert" className="text-caption text-danger">
+        {state.message}
+      </p>
+    )
   }
 
-  return <p>Backend conectado</p>
+  return <p className="text-caption text-text-muted">Backend conectado</p>
 }

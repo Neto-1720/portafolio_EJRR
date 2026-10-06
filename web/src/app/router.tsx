@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router'
-import { AppLayout } from '../components/AppLayout.tsx'
+import { AppLayout } from '../components/layout/AppLayout.tsx'
 import { AboutPage } from '../pages/AboutPage.tsx'
 import { ContactPage } from '../pages/ContactPage.tsx'
 import { HomePage } from '../pages/HomePage.tsx'

@@ -1,1 +1,68 @@
 @import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Geist Variable', 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, monospace;
+
+  --color-background: #09090b;
+  --color-surface: #121214;
+  --color-surface-elevated: #1c1c1f;
+  --color-border: #2a2a2e;
+  --color-text-primary: #f4f4f5;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #868690;
+  --color-accent: #b8884a;
+  --color-accent-hover: #c99658;
+  --color-success: #7f9a82;
+  --color-warning: #c4a36a;
+  --color-danger: #c47b72;
+
+  --text-display: 2.25rem;
+  --text-display--line-height: 1.15;
+  --text-h1: 1.875rem;
+  --text-h1--line-height: 1.2;
+  --text-h2: 1.375rem;
+  --text-h2--line-height: 1.3;
+  --text-h3: 1.0625rem;
+  --text-h3--line-height: 1.4;
+  --text-body: 1rem;
+  --text-body--line-height: 1.65;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.45;
+  --text-mono-label: 0.75rem;
+  --text-mono-label--line-height: 1.4;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+html {
+  color-scheme: dark;
+  background: var(--color-background);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  color: var(--color-text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

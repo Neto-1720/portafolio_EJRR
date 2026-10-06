@@ -1,8 +1,15 @@
+import { Section } from '../components/ui/Section.tsx'
+import { SectionHeader } from '../components/ui/SectionHeader.tsx'
+
 export function ContactPage() {
   return (
-    <section className="space-y-4">
-      <h1 className="text-2xl font-medium">Contacto</h1>
-      <p className="text-neutral-600">Esta página todavía es un placeholder.</p>
-    </section>
+    <Section>
+      <SectionHeader
+        heading="h1"
+        eyebrow="Contact"
+        title="Contacto"
+        description="Esta página todavía es un placeholder."
+      />
+    </Section>
   )
 }
