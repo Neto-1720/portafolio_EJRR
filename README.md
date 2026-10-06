@@ -1,6 +1,6 @@
 # Portfolio — Ernesto Jahir Rodríguez Ramírez
 
-Base técnica de un portafolio full stack. El monorepo ya tiene la API, el frontend y el esquema de datos. Todavía no hay pantallas finales, endpoints públicos ni admin.
+Base técnica de un portafolio full stack. El monorepo ya tiene el esquema de datos y la API pública de lectura. Todavía no hay pantallas finales ni admin, y React no consume estos endpoints.
 
 ## Arquitectura
 
@@ -172,6 +172,55 @@ php artisan migrate:fresh --seed
 
 Variables: `DB_CONNECTION=pgsql`, `DB_HOST`, `DB_PORT=5432`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, `DB_SSLMODE=require`.
 
+## Public API
+
+Lectura pública, sin autenticación. Las colecciones y el detalle usan el wrapper `data` de Laravel. `GET /api/health` sigue respondiendo `{"status":"ok"}`, sin ese wrapper.
+
+| Método | Ruta | Respuesta |
+| --- | --- | --- |
+| GET | `/api/health` | Estado de la API |
+| GET | `/api/projects` | Proyectos publicados, por `sort_order` e `id` |
+| GET | `/api/projects?featured=1` | Solo publicados y destacados |
+| GET | `/api/projects/{slug}` | Detalle si está publicado. Si no existe o es borrador, 404 |
+| GET | `/api/technologies` | Catálogo ordenado por categoría, `sort_order` y nombre |
+| GET | `/api/certifications` | Certificaciones publicadas. `issuer` puede ser `null` |
+
+`featured` solo filtra cuando vale `1`. El listado de proyectos no incluye los textos largos del caso. `cover_image` es la imagen con `is_cover`; si no hay, la primera por `sort_order`; si no hay imágenes, `null`.
+
+Ejemplo de card:
+
+```json
+{
+  "data": [
+    {
+      "slug": "saas-logistics-platform",
+      "title": "SaaS Logistics Platform",
+      "is_featured": true,
+      "cover_image": { "path": "projects/saas-logistics-platform/cover.webp", "is_cover": true },
+      "technologies": [{ "name": "Laravel", "slug": "laravel", "category": "backend" }]
+    }
+  ]
+}
+```
+
+Ejemplo de certificación:
+
+```json
+{
+  "data": [
+    {
+      "name": "React para principiantes",
+      "issuer": null,
+      "issued_at": null,
+      "credential_url": null,
+      "image_path": null
+    }
+  ]
+}
+```
+
+Los GET públicos comparten el límite de Laravel: 60 solicitudes por minuto por IP. CORS sigue aceptando solo `FRONTEND_URL`.
+
 ## Testing
 
 ```bash
@@ -179,7 +228,7 @@ cd api
 php artisan test
 ```
 
-PHPUnit cubre `GET /api/health`, las migraciones del portafolio, las relaciones y el seeder. Las pruebas usan SQLite en memoria.
+PHPUnit cubre `GET /api/health`, el esquema, el seeder y la API pública. Las pruebas usan SQLite en memoria.
 
 En el frontend:
 
@@ -194,4 +243,4 @@ Pest, Vitest y Playwright no están instalados. Entran en una fase posterior.
 
 ## Qué no está en esta base
 
-Pantallas finales, endpoints públicos, admin, autenticación, Storage, colas, correo y despliegue. Los demos existen solo como tablas y datos ficticios.
+Pantallas finales, conexión de React con la API, admin, autenticación, Storage, colas, correo y despliegue. Los demos existen solo como tablas y datos ficticios.

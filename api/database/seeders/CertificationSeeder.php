@@ -22,7 +22,7 @@ class CertificationSeeder extends Seeder
         foreach ($certifications as $index => $name) {
             Certification::query()->create([
                 'name' => $name,
-                'issuer' => 'Por confirmar',
+                'issuer' => null,
                 'issued_at' => null,
                 'credential_url' => null,
                 'image_path' => null,

@@ -40,3 +40,18 @@ php artisan migrate:fresh --seed
 ```
 
 Con Supabase, `DB_CONNECTION` es `pgsql` y `DB_SSLMODE` es `require`. Sin credenciales, el mismo comando corre sobre SQLite si `DB_CONNECTION=sqlite`. Las pruebas de PHPUnit no usan ninguna de las dos: migran SQLite en memoria.
+
+`certifications.issuer` es nullable. Si el emisor no se conoce, se guarda `null`.
+
+## API pública
+
+React todavía no llama a estos endpoints. La lectura pública es:
+
+- `GET /api/health`
+- `GET /api/projects`
+- `GET /api/projects?featured=1`
+- `GET /api/projects/{slug}`
+- `GET /api/technologies`
+- `GET /api/certifications`
+
+El listado y el detalle de proyectos cargan tecnologías e imágenes en la misma petición, no una consulta por registro. Un proyecto no publicado responde 404. Los ejemplos de JSON están en el README, sección Public API.

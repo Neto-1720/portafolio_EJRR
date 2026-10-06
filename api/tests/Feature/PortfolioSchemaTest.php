@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Certification;
 use App\Models\DemoConversation;
 use App\Models\DemoMessage;
 use App\Models\Project;
@@ -98,6 +99,9 @@ class PortfolioSchemaTest extends TestCase
         $this->assertDatabaseCount('projects', 5);
         $this->assertDatabaseCount('project_images', 5);
         $this->assertDatabaseCount('certifications', 2);
+        $this->assertNull(
+            Certification::query()->where('name', 'React para principiantes')->value('issuer'),
+        );
         $this->assertDatabaseCount('demo_shipments', 15);
         $this->assertDatabaseCount('demo_notifications', 10);
         $this->assertDatabaseCount('demo_conversations', 5);

@@ -61,6 +61,11 @@ class Project extends Model
         return $this->hasMany(ProjectImage::class)->orderBy('sort_order')->orderBy('id');
     }
 
+    public function coverImage(): ?ProjectImage
+    {
+        return $this->images->firstWhere('is_cover', true) ?? $this->images->first();
+    }
+
     /**
      * @param  Builder<Project>  $query
      */
