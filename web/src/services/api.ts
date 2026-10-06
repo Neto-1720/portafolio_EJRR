@@ -24,13 +24,31 @@ export async function requestJson(
   path: string,
   signal?: AbortSignal,
 ): Promise<unknown> {
+  return fetchJson(path, { signal, headers: { Accept: 'application/json' } })
+}
+
+export async function sendJson(
+  path: string,
+  method: 'POST' | 'PATCH',
+  body: unknown,
+  signal?: AbortSignal,
+): Promise<unknown> {
+  return fetchJson(path, {
+    method,
+    signal,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+}
+
+async function fetchJson(path: string, init: RequestInit): Promise<unknown> {
   let response: Response
 
   try {
-    response = await fetch(apiUrl(path), {
-      signal,
-      headers: { Accept: 'application/json' },
-    })
+    response = await fetch(apiUrl(path), init)
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') {
       throw error

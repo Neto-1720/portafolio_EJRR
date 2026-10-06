@@ -250,7 +250,7 @@ Pest, Vitest y Playwright no están instalados. Entran en una fase posterior.
 
 React llama a Laravel con `VITE_API_URL`. Los componentes no hacen `fetch`: usan `web/src/services/`.
 
-La home pide `GET /api/projects?featured=1`, `GET /api/technologies` y `GET /api/certifications`. `/work` pide `GET /api/projects`. El detalle pide `GET /api/projects/{slug}` y arma el case study. La estructura está en [docs/case-studies.md](docs/case-studies.md).
+La home pide `GET /api/projects?featured=1`, `GET /api/technologies` y `GET /api/certifications`. `/work` pide `GET /api/projects`. El detalle pide `GET /api/projects/{slug}` y arma el case study. La estructura está en [docs/case-studies.md](docs/case-studies.md). Las mini demos viven en `/demo/*` y se explican en [docs/demos.md](docs/demos.md).
 
 El perfil público vive en `web/src/config/profile.ts`. Nombre y rol están en código. GitHub, LinkedIn, correo y CV salen de variables de entorno y, si faltan, no se inventan.
 
@@ -258,4 +258,4 @@ Las portadas que la API entrega como ruta de almacenamiento, y no como URL públ
 
 ## Qué no está en esta base
 
-El formulario de contacto, admin, autenticación, Storage, colas, correo y despliegue. Los demos existen solo como tablas y datos ficticios. Las capturas de los case studies todavía no están: la galería usa placeholder mientras la ruta no sea una URL pública.
+El formulario de contacto, admin, autenticación, Storage, colas, correo real, WhatsApp real y despliegue. Las capturas de los case studies todavía no están: la galería usa placeholder mientras la ruta no sea una URL pública.

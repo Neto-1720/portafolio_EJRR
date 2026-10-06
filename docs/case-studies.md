@@ -4,7 +4,7 @@
 
 ## Secciones
 
-Hero, Overview, Problem, My Role, Solution, Technical Decisions, Challenges, Results, Learnings, Gallery y el regreso a Work. Una sección de texto no se muestra si el campo viene vacío. No se parten los párrafos en listas que la API no envía.
+Hero, Overview, Problem, My Role, Solution, Technical Decisions, Challenges, Results, Learnings, Gallery, Interactive Demo si el proyecto tiene una, y el regreso a Work. Una sección de texto no se muestra si el campo viene vacío. No se parten los párrafos en listas que la API no envía.
 
 El hero y la sección Technologies muestran las mismas insignias. El overview resume el stack en una línea. Las secciones de texto no vuelven a listarlas. Role, period y context solo aparecen si tienen valor.
 

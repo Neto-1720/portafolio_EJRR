@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Fillable([
     'customer_name',
@@ -42,5 +43,13 @@ class DemoConversation extends Model
     public function messages(): HasMany
     {
         return $this->hasMany(DemoMessage::class, 'conversation_id')->orderBy('sent_at')->orderBy('id');
+    }
+
+    /**
+     * @return HasOne<DemoMessage, $this>
+     */
+    public function latestMessage(): HasOne
+    {
+        return $this->hasOne(DemoMessage::class, 'conversation_id')->latestOfMany('sent_at');
     }
 }

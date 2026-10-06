@@ -3,6 +3,7 @@ import { useParams } from 'react-router'
 import { TechnologyBadge } from '../components/content/TechnologyBadge.tsx'
 import { ErrorState } from '../components/feedback/ErrorState.tsx'
 import { LinkButton } from '../components/ui/LinkButton.tsx'
+import { demoForProject } from '../features/demos/catalog.ts'
 import { CaseStudyHero } from '../features/work/CaseStudyHero.tsx'
 import { CaseStudySection } from '../features/work/CaseStudySection.tsx'
 import { CaseStudySkeleton } from '../features/work/CaseStudySkeleton.tsx'
@@ -115,12 +116,37 @@ function CaseStudy({ project }: { project: ProjectDetail }) {
         </section>
       ) : null}
       <ProjectGallery images={project.images} />
+      <DemoLink slug={project.slug} />
       <div className="border-t border-border py-10">
         <LinkButton to="/work" variant="secondary">
           Back to Work
         </LinkButton>
       </div>
     </article>
+  )
+}
+
+function DemoLink({ slug }: { slug: string }) {
+  const demo = demoForProject(slug)
+
+  if (!demo) {
+    return null
+  }
+
+  return (
+    <section className="border-t border-border py-10">
+      <h2 className="text-h2 tracking-tight text-text-primary">
+        Interactive Demo
+      </h2>
+      <p className="mt-4 max-w-2xl text-body text-text-secondary">
+        A small working slice of this case. It uses fictional data.
+      </p>
+      <div className="mt-6">
+        <LinkButton to={demo.path} variant="primary">
+          Open Demo
+        </LinkButton>
+      </div>
+    </section>
   )
 }
 
