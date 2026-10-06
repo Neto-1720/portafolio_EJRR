@@ -1,7 +1,7 @@
 import { TechnologyBadge } from '../../components/content/TechnologyBadge.tsx'
 import { LinkButton } from '../../components/ui/LinkButton.tsx'
 import type { ProjectImage, Technology } from '../../types/portfolio.ts'
-import { publicUrl } from '../../utils/publicUrl.ts'
+import { imageUrl } from '../../utils/publicUrl.ts'
 import { ImagePlaceholder } from './ImagePlaceholder.tsx'
 
 type CaseStudyHeroProps = {
@@ -23,7 +23,7 @@ export function CaseStudyHero({
   technologies,
   cover,
 }: CaseStudyHeroProps) {
-  const coverSrc = publicUrl(cover?.path)
+  const coverSrc = imageUrl(cover)
 
   return (
     <header className="grid items-end gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(16rem,0.9fr)]">

@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\CertificationController as AdminCertificationController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MessageController;
+use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Admin\ProjectImageController;
+use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\Demo\ConversationController as DemoConversationController;
 use App\Http\Controllers\Demo\NotificationController as DemoNotificationController;
@@ -14,6 +20,27 @@ Route::get('/projects', [ProjectController::class, 'index']);
 Route::get('/projects/{project:slug}', [ProjectController::class, 'show']);
 Route::get('/technologies', [TechnologyController::class, 'index']);
 Route::get('/certifications', [CertificationController::class, 'index']);
+
+Route::post('/login', [SessionController::class, 'store'])->middleware('throttle:5,1');
+Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth:sanctum');
+Route::get('/user', [SessionController::class, 'user'])->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')->prefix('admin')->group(function (): void {
+    Route::get('/dashboard', DashboardController::class);
+    Route::get('/messages', [MessageController::class, 'index']);
+    Route::get('/projects', [AdminProjectController::class, 'index']);
+    Route::post('/projects', [AdminProjectController::class, 'store']);
+    Route::get('/projects/{project}', [AdminProjectController::class, 'show']);
+    Route::match(['put', 'patch'], '/projects/{project}', [AdminProjectController::class, 'update']);
+    Route::delete('/projects/{project}', [AdminProjectController::class, 'destroy']);
+    Route::post('/projects/{project}/images', [ProjectImageController::class, 'store']);
+    Route::patch('/projects/{project}/images/{image}', [ProjectImageController::class, 'update']);
+    Route::delete('/projects/{project}/images/{image}', [ProjectImageController::class, 'destroy']);
+    Route::get('/certifications', [AdminCertificationController::class, 'index']);
+    Route::post('/certifications', [AdminCertificationController::class, 'store']);
+    Route::match(['put', 'patch'], '/certifications/{certification}', [AdminCertificationController::class, 'update']);
+    Route::delete('/certifications/{certification}', [AdminCertificationController::class, 'destroy']);
+});
 
 Route::prefix('demo')->group(function (): void {
     Route::get('/shipments', [DemoShipmentController::class, 'index']);

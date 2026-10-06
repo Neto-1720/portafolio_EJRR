@@ -8,6 +8,7 @@ export type Technology = {
 export type ProjectImage = {
   id: number
   path: string
+  url: string | null
   alt_text: string | null
   caption: string | null
   sort_order: number

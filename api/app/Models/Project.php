@@ -40,11 +40,6 @@ class Project extends Model
         ];
     }
 
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
-
     /**
      * @return BelongsToMany<Technology, $this>
      */

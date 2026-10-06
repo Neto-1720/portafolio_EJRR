@@ -248,14 +248,16 @@ Pest, Vitest y Playwright no están instalados. Entran en una fase posterior.
 
 ## Home y API
 
-React llama a Laravel con `VITE_API_URL`. Los componentes no hacen `fetch`: usan `web/src/services/`.
+En desarrollo, React llama a Laravel por el proxy de Vite (`/api` y `/sanctum` hacia `127.0.0.1:8000`), así la sesión de Sanctum comparte origen. El build de producción usa `VITE_API_URL` y envía cookies. Los componentes no hacen `fetch`: usan `web/src/services/`. El admin está en `/admin` y se explica en [docs/admin.md](docs/admin.md).
 
 La home pide `GET /api/projects?featured=1`, `GET /api/technologies` y `GET /api/certifications`. `/work` pide `GET /api/projects`. El detalle pide `GET /api/projects/{slug}` y arma el case study. La estructura está en [docs/case-studies.md](docs/case-studies.md). Las mini demos viven en `/demo/*` y se explican en [docs/demos.md](docs/demos.md).
 
 El perfil público vive en `web/src/config/profile.ts`. Nombre y rol están en código. GitHub, LinkedIn, correo y CV salen de variables de entorno y, si faltan, no se inventan.
 
-Las portadas que la API entrega como ruta de almacenamiento, y no como URL pública, se muestran con el placeholder de la tarjeta.
+Cada imagen pública incluye `path` y `url`. `url` es usable por el navegador cuando el archivo existe en el disco configurado. Si no hay archivo, `url` es `null` y la galería sigue mostrando el placeholder. El frontend no arma URLs de Storage.
+
+El administrador, la sesión y las imágenes se documentan en [docs/admin.md](docs/admin.md) y [docs/supabase-setup.md](docs/supabase-setup.md).
 
 ## Qué no está en esta base
 
-El formulario de contacto, admin, autenticación, Storage, colas, correo real, WhatsApp real y despliegue. Las capturas de los case studies todavía no están: la galería usa placeholder mientras la ruta no sea una URL pública.
+El formulario de contacto, colas, correo real, WhatsApp real y despliegue. Supabase todavía no tiene credenciales: las imágenes locales usan el disco `public`.

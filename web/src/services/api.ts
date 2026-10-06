@@ -10,7 +10,11 @@ export class ApiError extends Error {
   }
 }
 
-function apiUrl(path: string): string {
+export function apiUrl(path: string): string {
+  if (import.meta.env.DEV) {
+    return path
+  }
+
   const baseUrl = import.meta.env.VITE_API_URL
 
   if (!baseUrl) {
@@ -48,7 +52,7 @@ async function fetchJson(path: string, init: RequestInit): Promise<unknown> {
   let response: Response
 
   try {
-    response = await fetch(apiUrl(path), init)
+    response = await fetch(apiUrl(path), { ...init, credentials: 'include' })
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') {
       throw error

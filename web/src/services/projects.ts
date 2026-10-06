@@ -116,6 +116,7 @@ function readProjectImage(value: unknown): ProjectImage {
   return {
     id: readNumber(value.id),
     path: readString(value.path),
+    url: 'url' in value ? readNullableString(value.url) : null,
     alt_text: readNullableString(value.alt_text),
     caption: readNullableString(value.caption),
     sort_order: readNumber(value.sort_order),

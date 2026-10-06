@@ -1,5 +1,5 @@
 import type { ProjectImage } from '../../types/portfolio.ts'
-import { publicUrl } from '../../utils/publicUrl.ts'
+import { imageUrl } from '../../utils/publicUrl.ts'
 import { ImagePlaceholder } from './ImagePlaceholder.tsx'
 
 type ProjectGalleryProps = {
@@ -37,7 +37,7 @@ function GalleryFigure({
   image: ProjectImage
   large?: boolean
 }) {
-  const src = publicUrl(image.path)
+  const src = imageUrl(image)
   const label = image.alt_text ?? 'Sin imagen'
 
   return (

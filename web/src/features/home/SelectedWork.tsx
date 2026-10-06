@@ -7,7 +7,7 @@ import { Section } from '../../components/ui/Section.tsx'
 import { SectionHeader } from '../../components/ui/SectionHeader.tsx'
 import { useRemoteData } from '../../hooks/useRemoteData.ts'
 import { getFeaturedProjects } from '../../services/projects.ts'
-import { publicUrl } from '../../utils/publicUrl.ts'
+import { imageUrl } from '../../utils/publicUrl.ts'
 
 export function SelectedWork() {
   const load = useCallback(
@@ -56,8 +56,10 @@ export function SelectedWork() {
   )
 }
 
-function coverImage(image: { path: string; alt_text: string | null } | null) {
-  const src = publicUrl(image?.path)
+function coverImage(
+  image: { url?: string | null; path: string; alt_text: string | null } | null,
+) {
+  const src = imageUrl(image)
 
   if (!src || !image) {
     return null

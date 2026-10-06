@@ -13,3 +13,13 @@ export function publicUrl(value: string | null | undefined): string | null {
 
   return null
 }
+
+export function imageUrl(
+  image: { url?: string | null; path: string } | null | undefined,
+): string | null {
+  if (!image) {
+    return null
+  }
+
+  return publicUrl(image.url) ?? publicUrl(image.path)
+}
