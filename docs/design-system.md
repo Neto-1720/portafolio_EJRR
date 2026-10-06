@@ -1,6 +1,6 @@
 # Sistema visual
 
-La interfaz es clara y cálida. El fondo es crema, las piezas son blanco cálido y el naranja solo marca foco, selección puntual y la línea de experiencia. No es un tema oscuro.
+La interfaz abre en crema: fondo cálido, piezas en blanco cálido y naranja solo en el foco, el punto de la experiencia y el hover tenue. El interruptor de la navbar pasa a modo nocturno (`data-theme="dark"` en `html`) y guarda la elección en `portfolio-theme`. El nocturno usa negro cálido y el mismo acento, un poco más claro para que el foco se vea.
 
 Los tokens viven en `web/src/index.css`, dentro de `@theme`. Tailwind es la capa de estilos. No hay una hoja por componente.
 
@@ -43,4 +43,4 @@ web/src/components/
   feedback/    carga, error, vacío y skeleton
 ```
 
-Un botón ejecuta una acción. Un enlace navega. GitHub, LinkedIn y el correo salen de `VITE_GITHUB_URL`, `VITE_LINKEDIN_URL` y `VITE_EMAIL`. Si faltan, el texto se muestra y no se inventa una URL. Engineering no es una ruta: el navbar apunta a `/#engineering`.
+Un botón ejecuta una acción. Un enlace navega. GitHub, LinkedIn, el correo y el CV salen de `VITE_GITHUB_URL`, `VITE_LINKEDIN_URL`, `VITE_EMAIL` y `VITE_CV_URL`. Si faltan, el enlace no se muestra. Engineering no es una ruta: el navbar apunta a `/#engineering`.

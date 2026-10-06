@@ -1,8 +1,8 @@
 type ExperienceItemProps = {
-  period: string
+  period?: string | null
   title: string
   company: string
-  summary: string
+  summary?: string | null
 }
 
 export function ExperienceItem({
@@ -17,12 +17,16 @@ export function ExperienceItem({
         aria-hidden="true"
         className="absolute top-7 -left-[5px] size-2.5 rounded-full border-2 border-accent bg-surface"
       />
-      <p className="font-mono text-caption text-text-muted">{period}</p>
+      {period ? (
+        <p className="font-mono text-caption text-text-muted">{period}</p>
+      ) : null}
       <h3 className="mt-1 text-h3 break-words text-text-primary">{title}</h3>
       <p className="mt-1 text-small text-text-secondary">{company}</p>
-      <p className="mt-2 text-small break-words text-text-secondary">
-        {summary}
-      </p>
+      {summary ? (
+        <p className="mt-2 text-small break-words text-text-secondary">
+          {summary}
+        </p>
+      ) : null}
     </article>
   )
 }

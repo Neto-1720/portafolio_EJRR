@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router'
 import { TechnologyBadge } from './TechnologyBadge.tsx'
 
@@ -11,6 +12,7 @@ type ProjectCardProps = {
   summary: string
   technologies: string[]
   href: string
+  cta?: string
   coverImage?: ProjectCardImage | null
 }
 
@@ -19,8 +21,12 @@ export function ProjectCard({
   summary,
   technologies,
   href,
+  cta = 'Ver proyecto',
   coverImage = null,
 }: ProjectCardProps) {
+  const [imageFailed, setImageFailed] = useState(false)
+  const image = coverImage && !imageFailed ? coverImage : null
+
   return (
     <article className="min-w-0 rounded-xl border border-border bg-surface p-3 shadow-sm transition duration-150 hover:-translate-y-0.5 hover:shadow-md motion-reduce:transition-none motion-reduce:hover:translate-y-0">
       <Link
@@ -29,11 +35,14 @@ export function ProjectCard({
         className="focus-ring block rounded-lg"
       >
         <div className="flex aspect-[16/10] items-end overflow-hidden rounded-lg bg-surface-secondary">
-          {coverImage ? (
+          {image ? (
             <img
-              src={coverImage.src}
-              alt={coverImage.alt}
+              src={image.src}
+              alt={image.alt}
+              loading="lazy"
+              decoding="async"
               className="h-full w-full object-cover"
+              onError={() => setImageFailed(true)}
             />
           ) : (
             <p className="p-4 font-mono text-caption text-text-muted">
@@ -55,7 +64,7 @@ export function ProjectCard({
               ))}
             </ul>
           ) : null}
-          <p className="text-small text-text-secondary">Ver proyecto</p>
+          <p className="text-small text-text-secondary">{cta}</p>
         </div>
       </Link>
     </article>

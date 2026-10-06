@@ -1,9 +1,12 @@
 import type { HealthResponse } from '../types/health.ts'
 
 export class ApiError extends Error {
-  constructor(message: string) {
+  readonly status: number | null
+
+  constructor(message: string, status: number | null = null) {
     super(message)
     this.name = 'ApiError'
+    this.status = status
   }
 }
 
@@ -17,11 +20,14 @@ function apiUrl(path: string): string {
   return `${baseUrl.replace(/\/$/, '')}${path}`
 }
 
-export async function getHealth(signal?: AbortSignal): Promise<HealthResponse> {
+export async function requestJson(
+  path: string,
+  signal?: AbortSignal,
+): Promise<unknown> {
   let response: Response
 
   try {
-    response = await fetch(apiUrl('/api/health'), {
+    response = await fetch(apiUrl(path), {
       signal,
       headers: { Accept: 'application/json' },
     })
@@ -33,11 +39,23 @@ export async function getHealth(signal?: AbortSignal): Promise<HealthResponse> {
     throw new ApiError('No se pudo conectar con el backend.')
   }
 
-  if (!response.ok) {
-    throw new ApiError('El backend respondió con un error.')
+  if (response.status === 404) {
+    throw new ApiError('No se encontró el recurso.', 404)
   }
 
-  const body: unknown = await response.json()
+  if (!response.ok) {
+    throw new ApiError('El backend respondió con un error.', response.status)
+  }
+
+  try {
+    return (await response.json()) as unknown
+  } catch {
+    throw new ApiError('La respuesta del backend no es JSON válido.')
+  }
+}
+
+export async function getHealth(signal?: AbortSignal): Promise<HealthResponse> {
+  const body = await requestJson('/api/health', signal)
 
   if (!isHealthResponse(body)) {
     throw new ApiError('La respuesta del backend no tiene el formato esperado.')

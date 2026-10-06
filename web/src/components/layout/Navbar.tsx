@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router'
-import { navItems, site } from '../../config/site.ts'
+import { profile } from '../../config/profile.ts'
+import { navItems } from '../../config/site.ts'
 import { cn } from '../../utils/cn.ts'
 import { Container } from '../ui/Container.tsx'
 import { IconButton } from '../ui/IconButton.tsx'
+import { ThemeSwitch } from './ThemeSwitch.tsx'
 
 export function Navbar() {
   const location = useLocation()
@@ -39,23 +41,26 @@ export function Navbar() {
             to="/"
             className="focus-ring text-small font-medium tracking-wide text-text-primary"
           >
-            {site.mark}
+            {profile.mark}
           </Link>
           <nav className="hidden md:block" aria-label="Principal">
             <NavList />
           </nav>
-          <div className="hidden items-center gap-4 md:flex">
-            <ProfileLinks />
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="hidden items-center gap-4 md:flex">
+              <ProfileLinks />
+            </div>
+            <ThemeSwitch />
+            <IconButton
+              className="md:hidden"
+              label={open ? 'Cerrar menú' : 'Abrir menú'}
+              aria-expanded={open}
+              aria-controls="navegacion-movil"
+              onClick={() => setOpen((current) => !current)}
+            >
+              {open ? 'Cerrar' : 'Menú'}
+            </IconButton>
           </div>
-          <IconButton
-            className="md:hidden"
-            label={open ? 'Cerrar menú' : 'Abrir menú'}
-            aria-expanded={open}
-            aria-controls="navegacion-movil"
-            onClick={() => setOpen((current) => !current)}
-          >
-            {open ? 'Cerrar' : 'Menú'}
-          </IconButton>
         </div>
         {open ? (
           <nav
@@ -111,14 +116,9 @@ function NavList({ stacked = false }: { stacked?: boolean }) {
 function ProfileLinks() {
   return (
     <>
-      <OptionalLink href={site.githubUrl}>GitHub</OptionalLink>
-      <OptionalLink href={site.linkedinUrl}>LinkedIn</OptionalLink>
-      <a
-        href={site.cvPath}
-        className="focus-ring text-small text-text-secondary hover:text-text-primary"
-      >
-        CV
-      </a>
+      <OptionalLink href={profile.github}>GitHub</OptionalLink>
+      <OptionalLink href={profile.linkedin}>LinkedIn</OptionalLink>
+      <OptionalLink href={profile.cvUrl}>CV</OptionalLink>
     </>
   )
 }
@@ -131,7 +131,7 @@ function OptionalLink({
   children: string
 }) {
   if (!href) {
-    return <span className="text-small text-text-muted">{children}</span>
+    return null
   }
 
   return (

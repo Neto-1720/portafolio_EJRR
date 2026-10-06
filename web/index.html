@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f7f0e7" />
     <title>Portfolio</title>
+    <script>
+      try {
+        if (localStorage.getItem('portfolio-theme') === 'dark') {
+          document.documentElement.dataset.theme = 'dark'
+          var themeColor = document.querySelector('meta[name="theme-color"]')
+          if (themeColor) themeColor.setAttribute('content', '#0c0a09')
+        }
+      } catch (error) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

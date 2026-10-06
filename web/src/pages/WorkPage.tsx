@@ -1,22 +1,62 @@
-import { LinkButton } from '../components/ui/LinkButton.tsx'
+import { useCallback } from 'react'
+import { ProjectCard } from '../components/content/ProjectCard.tsx'
+import { EmptyState } from '../components/feedback/EmptyState.tsx'
+import { ErrorState } from '../components/feedback/ErrorState.tsx'
+import { LoadingState } from '../components/feedback/LoadingState.tsx'
 import { Section } from '../components/ui/Section.tsx'
 import { SectionHeader } from '../components/ui/SectionHeader.tsx'
-import { Stack } from '../components/ui/Stack.tsx'
+import { useRemoteData } from '../hooks/useRemoteData.ts'
+import { getProjects } from '../services/projects.ts'
+import { publicUrl } from '../utils/publicUrl.ts'
+
+function coverImage(image: { path: string; alt_text: string | null } | null) {
+  const src = publicUrl(image?.path)
+
+  if (!src || !image) {
+    return null
+  }
+
+  return { src, alt: image.alt_text ?? '' }
+}
 
 export function WorkPage() {
+  const load = useCallback((signal: AbortSignal) => getProjects(signal), [])
+  const { state, retry } = useRemoteData(load)
+
   return (
     <Section>
-      <Stack>
-        <SectionHeader
-          heading="h1"
-          eyebrow="Work"
-          title="Proyectos"
-          description="El listado de case studies todavía no está."
-        />
-        <LinkButton to="/work/ejemplo" variant="ghost" className="w-fit px-0">
-          Abrir una ruta de detalle
-        </LinkButton>
-      </Stack>
+      <SectionHeader
+        heading="h1"
+        eyebrow="Work"
+        title="Proyectos"
+        description="Casos publicados. El detalle completo de cada uno llega después."
+      />
+      <div className="mt-8">
+        {state.status === 'loading' ? (
+          <LoadingState label="Cargando proyectos" />
+        ) : null}
+        {state.status === 'error' ? (
+          <ErrorState message={state.message} onRetry={retry} />
+        ) : null}
+        {state.status === 'ok' && state.data.length === 0 ? (
+          <EmptyState title="No hay proyectos publicados" />
+        ) : null}
+        {state.status === 'ok' && state.data.length > 0 ? (
+          <div className="grid gap-4 md:grid-cols-2">
+            {state.data.map((project) => (
+              <ProjectCard
+                key={project.id}
+                title={project.title}
+                summary={project.summary}
+                technologies={project.technologies.map((item) => item.name)}
+                href={`/work/${project.slug}`}
+                cta="Ver caso"
+                coverImage={coverImage(project.cover_image)}
+              />
+            ))}
+          </div>
+        ) : null}
+      </div>
     </Section>
   )
 }

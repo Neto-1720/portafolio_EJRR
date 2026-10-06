@@ -4,8 +4,7 @@
   --font-sans:
     'Geist Variable', Geist, system-ui, -apple-system, BlinkMacSystemFont,
     'Segoe UI', sans-serif;
-  --font-mono:
-    'Geist Mono Variable', 'Geist Mono', ui-monospace, monospace;
+  --font-mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, monospace;
 
   --color-background: #f7f0e7;
   --color-surface: #fffdfb;
@@ -45,6 +44,25 @@
   --text-caption--line-height: 1.45;
   --text-mono-label: 0.75rem;
   --text-mono-label--line-height: 1.4;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --color-background: #0c0a09;
+  --color-surface: #171412;
+  --color-surface-secondary: #241f1b;
+  --color-border: #3f362f;
+  --color-text-primary: #f7f0e7;
+  --color-text-secondary: #cfc4b8;
+  --color-text-muted: #a89888;
+  --color-accent: #e0893a;
+  --color-accent-soft: #3a2a1c;
+  --color-success: #8fbfa0;
+  --color-warning: #e0b56a;
+  --color-danger: #e7a8a0;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 1px 2px rgb(0 0 0 / 0.35), 0 12px 32px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 1px 2px rgb(0 0 0 / 0.4), 0 16px 40px rgb(0 0 0 / 0.5);
 }
 
 .focus-ring:focus-visible {

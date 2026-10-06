@@ -1,5 +1,10 @@
+import { profile } from '../config/profile.ts'
+import { TechnologyBadge } from '../components/content/TechnologyBadge.tsx'
 import { Section } from '../components/ui/Section.tsx'
 import { SectionHeader } from '../components/ui/SectionHeader.tsx'
+import { aboutCopy } from '../features/home/engineering.ts'
+
+const focus = ['Laravel', 'React', 'TypeScript', 'REST APIs', 'PostgreSQL']
 
 export function AboutPage() {
   return (
@@ -8,8 +13,30 @@ export function AboutPage() {
         heading="h1"
         eyebrow="About"
         title="Acerca de"
-        description="Esta página todavía es un placeholder."
+        description={aboutCopy[0]}
       />
+      <div className="mt-6 max-w-2xl space-y-4">
+        <p className="text-body text-text-secondary">{aboutCopy[1]}</p>
+        <p className="text-body text-text-secondary">
+          Prefiero sistemas claros: responsabilidades separadas, interfaces
+          predecibles y cambios que se puedan revisar.
+        </p>
+      </div>
+      <ul className="mt-8 flex flex-wrap gap-2">
+        {focus.map((item) => (
+          <li key={item}>
+            <TechnologyBadge name={item} />
+          </li>
+        ))}
+      </ul>
+      {profile.cvUrl ? (
+        <a
+          href={profile.cvUrl}
+          className="focus-ring mt-8 inline-flex h-10 items-center justify-center rounded-md bg-text-primary px-4 text-small text-background shadow-sm hover:bg-text-primary/88"
+        >
+          Descargar CV
+        </a>
+      ) : null}
     </Section>
   )
 }

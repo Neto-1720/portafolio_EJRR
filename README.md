@@ -1,6 +1,6 @@
 # Portfolio — Ernesto Jahir Rodríguez Ramírez
 
-Base técnica de un portafolio full stack. El monorepo ya tiene el esquema de datos, la API pública de lectura y la base visual de React. Todavía no hay pantallas finales ni admin, y React no consume los endpoints de proyectos, tecnologías ni certificaciones.
+Base técnica de un portafolio full stack. El monorepo ya tiene el esquema de datos, la API pública de lectura y la home conectada a esa API. Todavía no hay case studies completos ni admin.
 
 ## Arquitectura
 
@@ -35,10 +35,10 @@ Frontend:
 web/src/
   app/          router
   components/   ui, layout, content, feedback
-  config/       identidad y enlaces
-  features/     comprobación de /api/health
-  pages/        placeholders dentro del layout
-  services/     cliente HTTP
+  config/       perfil y navegación
+  features/     home y comprobación de /api/health
+  pages/        home, work, about y contact
+  services/     cliente HTTP de la API pública
   hooks/
   types/
   utils/
@@ -102,6 +102,10 @@ SQLite no sustituye a Supabase. Sirve para migrar y sembrar en local. El detalle
 | Variable | Uso |
 | --- | --- |
 | `VITE_API_URL` | Origen de la API, sin barra final. En local: `http://127.0.0.1:8000` |
+| `VITE_GITHUB_URL` | Opcional. Si falta, el enlace no se muestra. |
+| `VITE_LINKEDIN_URL` | Opcional. Si falta, el enlace no se muestra. |
+| `VITE_EMAIL` | Opcional. Si falta, el correo no se muestra. |
+| `VITE_CV_URL` | Opcional. Si falta, no hay botón de CV. |
 
 `api/.env.example`
 
@@ -242,6 +246,16 @@ npm run build
 
 Pest, Vitest y Playwright no están instalados. Entran en una fase posterior.
 
+## Home y API
+
+React llama a Laravel con `VITE_API_URL`. Los componentes no hacen `fetch`: usan `web/src/services/`.
+
+La home pide `GET /api/projects?featured=1`, `GET /api/technologies` y `GET /api/certifications`. `/work` pide `GET /api/projects`. El detalle pide `GET /api/projects/{slug}` y deja el case study para la fase siguiente.
+
+El perfil público vive en `web/src/config/profile.ts`. Nombre y rol están en código. GitHub, LinkedIn, correo y CV salen de variables de entorno y, si faltan, no se inventan.
+
+Las portadas que la API entrega como ruta de almacenamiento, y no como URL pública, se muestran con el placeholder de la tarjeta.
+
 ## Qué no está en esta base
 
-La home final, los case studies, la conexión de React con los GET de proyectos, tecnologías y certificaciones, admin, autenticación, Storage, colas, correo y despliegue. Los demos existen solo como tablas y datos ficticios.
+Los case studies completos, el formulario de contacto, admin, autenticación, Storage, colas, correo y despliegue. Los demos existen solo como tablas y datos ficticios.
