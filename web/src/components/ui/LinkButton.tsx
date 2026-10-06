@@ -3,10 +3,10 @@ import { Link } from 'react-router'
 import { cn } from '../../utils/cn.ts'
 
 const variants = {
-  primary: 'bg-accent text-background hover:bg-accent-hover',
+  primary: 'bg-text-primary text-background shadow-sm hover:bg-text-primary/88',
   secondary:
-    'border border-border bg-surface text-text-primary hover:bg-surface-elevated',
-  ghost: 'text-text-secondary hover:text-text-primary',
+    'border border-border bg-surface text-text-primary shadow-sm hover:bg-surface-secondary',
+  ghost: 'text-text-secondary hover:bg-accent-soft hover:text-text-primary',
 }
 
 type LinkButtonProps = {
@@ -23,7 +23,7 @@ export function LinkButton({
   className,
 }: LinkButtonProps) {
   const classNames = cn(
-    'focus-ring inline-flex h-9 items-center justify-center px-3 text-small transition-colors duration-150 motion-reduce:transition-none',
+    'focus-ring inline-flex h-10 items-center justify-center rounded-md px-4 text-small transition duration-150 motion-reduce:transition-none',
     variants[variant],
     className,
   )

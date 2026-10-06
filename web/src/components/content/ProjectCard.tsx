@@ -22,9 +22,13 @@ export function ProjectCard({
   coverImage = null,
 }: ProjectCardProps) {
   return (
-    <article className="min-w-0 border border-border bg-surface transition-colors duration-150 hover:border-text-muted/50 motion-reduce:transition-none">
-      <Link to={href} aria-label={title} className="focus-ring block h-full">
-        <div className="flex aspect-[16/10] items-end border-b border-border bg-surface-elevated">
+    <article className="min-w-0 rounded-xl border border-border bg-surface p-3 shadow-sm transition duration-150 hover:-translate-y-0.5 hover:shadow-md motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+      <Link
+        to={href}
+        aria-label={title}
+        className="focus-ring block rounded-lg"
+      >
+        <div className="flex aspect-[16/10] items-end overflow-hidden rounded-lg bg-surface-secondary">
           {coverImage ? (
             <img
               src={coverImage.src}
@@ -37,7 +41,7 @@ export function ProjectCard({
             </p>
           )}
         </div>
-        <div className="space-y-4 p-5">
+        <div className="space-y-4 px-2 pt-4 pb-2">
           <h3 className="text-h3 break-words text-text-primary">{title}</h3>
           <p className="line-clamp-3 text-small break-words text-text-secondary">
             {summary}
@@ -51,7 +55,7 @@ export function ProjectCard({
               ))}
             </ul>
           ) : null}
-          <p className="text-small text-text-primary">Ver proyecto</p>
+          <p className="text-small text-text-secondary">Ver proyecto</p>
         </div>
       </Link>
     </article>

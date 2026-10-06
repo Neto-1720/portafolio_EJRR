@@ -1,21 +1,33 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: 'Geist Variable', 'Geist', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, monospace;
+  --font-sans:
+    'Geist Variable', Geist, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif;
+  --font-mono:
+    'Geist Mono Variable', 'Geist Mono', ui-monospace, monospace;
 
-  --color-background: #09090b;
-  --color-surface: #121214;
-  --color-surface-elevated: #1c1c1f;
-  --color-border: #2a2a2e;
-  --color-text-primary: #f4f4f5;
-  --color-text-secondary: #a1a1aa;
-  --color-text-muted: #868690;
-  --color-accent: #b8884a;
-  --color-accent-hover: #c99658;
-  --color-success: #7f9a82;
-  --color-warning: #c4a36a;
-  --color-danger: #c47b72;
+  --color-background: #f7f0e7;
+  --color-surface: #fffdfb;
+  --color-surface-secondary: #f3ebe3;
+  --color-border: #e5d9c9;
+  --color-text-primary: #1c1917;
+  --color-text-secondary: #57534e;
+  --color-text-muted: #6b635c;
+  --color-accent: #a85410;
+  --color-accent-soft: #f6e8d8;
+  --color-success: #3d6b4f;
+  --color-warning: #8a5a12;
+  --color-danger: #9a4038;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+
+  --shadow-sm: 0 1px 2px rgb(28 25 23 / 0.04);
+  --shadow-md: 0 1px 2px rgb(28 25 23 / 0.03), 0 12px 32px rgb(28 25 23 / 0.05);
+  --shadow-lg: 0 1px 2px rgb(28 25 23 / 0.04), 0 16px 40px rgb(28 25 23 / 0.07);
 
   --text-display: 2.25rem;
   --text-display--line-height: 1.15;
@@ -41,7 +53,7 @@
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
   background: var(--color-background);
 }
 
@@ -57,7 +69,7 @@ body {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  background: var(--color-accent-soft);
   color: var(--color-text-primary);
 }
 

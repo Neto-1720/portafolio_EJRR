@@ -34,7 +34,7 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-20 border-b border-border bg-background">
       <Container>
-        <div className="flex h-14 items-center justify-between gap-4">
+        <div className="flex h-16 items-center justify-between gap-4">
           <Link
             to="/"
             className="focus-ring text-small font-medium tracking-wide text-text-primary"
@@ -82,7 +82,7 @@ function NavList({ stacked = false }: { stacked?: boolean }) {
           {item.to.includes('#') ? (
             <Link
               to={item.to}
-              className="focus-ring text-small text-text-secondary hover:text-text-primary"
+              className="focus-ring rounded-md px-2.5 py-1.5 text-small text-text-secondary hover:bg-surface hover:text-text-primary"
             >
               {item.label}
             </Link>
@@ -92,8 +92,10 @@ function NavList({ stacked = false }: { stacked?: boolean }) {
               end={item.end}
               className={({ isActive }) =>
                 cn(
-                  'focus-ring text-small hover:text-text-primary',
-                  isActive ? 'text-text-primary' : 'text-text-secondary',
+                  'focus-ring rounded-md px-2.5 py-1.5 text-small',
+                  isActive
+                    ? 'bg-surface text-text-primary shadow-sm'
+                    : 'text-text-secondary hover:bg-surface hover:text-text-primary',
                 )
               }
             >

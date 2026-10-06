@@ -14,7 +14,7 @@ export function AppLayout() {
       </a>
       <Navbar />
       <main id="contenido" className="flex-1">
-        <Container className="py-10 md:py-14">
+        <Container className="py-14 md:py-20">
           <Outlet />
         </Container>
       </main>

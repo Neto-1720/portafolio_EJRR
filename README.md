@@ -16,7 +16,7 @@ Laravel (api/)
 PostgreSQL en Supabase
 ```
 
-El detalle está en [docs/arquitectura.md](docs/arquitectura.md). Tokens y convenciones de componentes: [docs/ui.md](docs/ui.md).
+El detalle está en [docs/arquitectura.md](docs/arquitectura.md). El sistema visual está en [docs/design-system.md](docs/design-system.md).
 
 ## Estructura
 

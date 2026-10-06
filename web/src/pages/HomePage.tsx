@@ -58,10 +58,12 @@ export function HomePage() {
             name="React para principiantes"
             issuer={null}
             issuedAt={null}
+            href="/about"
           />
           <ExperienceItem
             period="Periodo"
             title="Full Stack Developer"
+            company="Empresa"
             summary="Línea de ejemplo para el ritmo vertical del ítem. No es la sección de experiencia final."
           />
         </div>
