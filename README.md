@@ -1,6 +1,6 @@
 # Portfolio — Ernesto Jahir Rodríguez Ramírez
 
-Base técnica de un portafolio full stack. Esta fase deja el monorepo instalable, con el frontend hablando con la API. Todavía no hay pantallas finales, case studies, admin ni el esquema de datos del portafolio.
+Base técnica de un portafolio full stack. El monorepo ya tiene la API, el frontend y el esquema de datos. Todavía no hay pantallas finales, endpoints públicos ni admin.
 
 ## Arquitectura
 
@@ -72,27 +72,27 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-Cuando `DB_*` apunte a Supabase:
+Con Postgres de Supabase en `.env`:
 
 ```bash
-php artisan migrate
+php artisan migrate:fresh --seed
 ```
 
-El esqueleto de Laravel trae migraciones de `users`, `cache` y `jobs`. El esquema del portafolio todavía no existe.
-
-Sin credenciales de Supabase, el `.env` local puede usar SQLite para migrar esas tablas del esqueleto:
+Sin credenciales, el `.env` local puede seguir en SQLite:
 
 ```bash
 touch database/database.sqlite
 ```
 
-y en `.env`:
-
 ```
 DB_CONNECTION=sqlite
 ```
 
-Eso no sustituye a Postgres. Solo permite trabajar en local antes de tener el proyecto de Supabase.
+```bash
+php artisan migrate:fresh --seed
+```
+
+SQLite no sustituye a Supabase. Sirve para migrar y sembrar en local. El detalle de las tablas está en [Modelo de datos](#modelo-de-datos).
 
 ## Variables de entorno
 
@@ -141,6 +141,37 @@ php artisan serve
 
 La home temporal llama a `GET /api/health`. Si la API responde, se muestra «Backend conectado». Si no, se muestra el error.
 
+## Modelo de datos
+
+Laravel es el único cliente de la base. React no consulta estas tablas.
+
+| Tabla | Relación |
+| --- | --- |
+| `projects` | Pertenece a muchas `technologies`. Tiene muchas `project_images`. |
+| `technologies` | Pertenece a muchos `projects` por `project_technology`. |
+| `project_images` | Pertenece a un `project`. `path` reserva el archivo; Storage todavía no sube nada. |
+| `certifications` | Catálogo independiente. |
+| `contact_messages` | Bandeja futura. Sin formulario ni correo. |
+| `demo_shipments` | Envíos ficticios. |
+| `demo_notifications` | Avisos ficticios. Sin envío real. |
+| `demo_conversations` | Tiene muchos `demo_messages`. |
+| `demo_messages` | Pertenece a una `demo_conversations`. |
+
+`project_technology` borra el vínculo si se borra el proyecto o la tecnología. Las imágenes se borran con el proyecto. Los mensajes se borran con la conversación.
+
+Categorías de tecnología, estados de envío, canal de aviso y tipo de emisor son texto. No hay un enum de Postgres, para poder sumar valores después.
+
+El seeder crea 5 proyectos, 15 tecnologías, 5 rutas de imagen, 2 certificaciones, 15 envíos, 10 avisos, 5 conversaciones y 20 mensajes. Los tres proyectos destacados son logística, notificaciones y mesa de soporte. Las empresas de los demos son Acme Logistics, Nova Commerce y Northstar Retail.
+
+Para conectar Supabase, completa en `api/.env` los valores del panel (Database → conexión directa, puerto 5432) y ejecuta:
+
+```bash
+cd api
+php artisan migrate:fresh --seed
+```
+
+Variables: `DB_CONNECTION=pgsql`, `DB_HOST`, `DB_PORT=5432`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, `DB_SSLMODE=require`.
+
 ## Testing
 
 ```bash
@@ -148,7 +179,7 @@ cd api
 php artisan test
 ```
 
-Hay una prueba de `GET /api/health`, incluido el encabezado CORS.
+PHPUnit cubre `GET /api/health`, las migraciones del portafolio, las relaciones y el seeder. Las pruebas usan SQLite en memoria.
 
 En el frontend:
 
@@ -163,4 +194,4 @@ Pest, Vitest y Playwright no están instalados. Entran en una fase posterior.
 
 ## Qué no está en esta base
 
-Pantallas finales, case studies, demos, admin, autenticación, CRUDs, el esquema del portafolio, Storage y despliegue.
+Pantallas finales, endpoints públicos, admin, autenticación, Storage, colas, correo y despliegue. Los demos existen solo como tablas y datos ficticios.
