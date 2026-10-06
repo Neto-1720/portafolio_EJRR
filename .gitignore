@@ -1,0 +1,43 @@
+# Dependencias
+node_modules/
+vendor/
+
+# Entornos y secretos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+auth.json
+credentials.json
+
+# Builds
+dist/
+dist-ssr/
+build/
+public/hot/
+public/build/
+
+# Logs y almacenamiento privado
+*.log
+logs/
+storage/logs/
+storage/*.key
+storage/pail/
+storage/framework/cache/data/
+storage/framework/sessions/
+storage/framework/views/
+
+# Bases locales
+*.sqlite
+*.sqlite-journal
+
+# Cachés y herramientas
+.phpunit.result.cache
+.phpunit.cache
+.phpactor.json
+.DS_Store
+.idea/
+.nova/
+.zed/
+Thumbs.db
