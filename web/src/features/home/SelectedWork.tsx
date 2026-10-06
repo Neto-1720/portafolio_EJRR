@@ -21,7 +21,7 @@ export function SelectedWork() {
       <SectionHeader
         eyebrow="Work"
         title="Selected Work"
-        description="Tres productos destacados. El caso completo llega en la siguiente fase."
+        description="Tres productos destacados."
       />
       <div className="mt-8">
         {state.status === 'loading' ? (

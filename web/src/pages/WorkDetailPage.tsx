@@ -1,14 +1,16 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useParams } from 'react-router'
 import { TechnologyBadge } from '../components/content/TechnologyBadge.tsx'
-import { EmptyState } from '../components/feedback/EmptyState.tsx'
 import { ErrorState } from '../components/feedback/ErrorState.tsx'
-import { LoadingState } from '../components/feedback/LoadingState.tsx'
 import { LinkButton } from '../components/ui/LinkButton.tsx'
-import { Section } from '../components/ui/Section.tsx'
-import { SectionHeader } from '../components/ui/SectionHeader.tsx'
+import { CaseStudyHero } from '../features/work/CaseStudyHero.tsx'
+import { CaseStudySection } from '../features/work/CaseStudySection.tsx'
+import { CaseStudySkeleton } from '../features/work/CaseStudySkeleton.tsx'
+import { ProjectGallery } from '../features/work/ProjectGallery.tsx'
+import { ProjectOverview } from '../features/work/ProjectOverview.tsx'
 import { useRemoteData } from '../hooks/useRemoteData.ts'
 import { getProject } from '../services/projects.ts'
+import type { ProjectDetail } from '../types/portfolio.ts'
 
 export function WorkDetailPage() {
   const { slug = '' } = useParams()
@@ -18,65 +20,118 @@ export function WorkDetailPage() {
   )
   const { state, retry } = useRemoteData(load, slug)
 
+  useEffect(() => {
+    const previous = document.title
+
+    if (state.status === 'ok') {
+      document.title = `${state.data.title} — Ernesto Rodríguez`
+    }
+
+    if (state.status === 'error' && state.statusCode === 404) {
+      document.title = 'Proyecto no encontrado — Ernesto Rodríguez'
+    }
+
+    return () => {
+      document.title = previous
+    }
+  }, [state])
+
   if (state.status === 'loading') {
-    return (
-      <Section>
-        <LoadingState label="Cargando proyecto" />
-      </Section>
-    )
+    return <CaseStudySkeleton />
   }
 
   if (state.status === 'error' && state.statusCode === 404) {
     return (
-      <Section>
-        <EmptyState
-          title="No se encontró este proyecto"
-          description="Puede que no esté publicado o que la dirección haya cambiado."
-        />
-        <div className="mt-6">
-          <LinkButton to="/work" variant="ghost" className="w-fit px-3">
-            Volver al listado
+      <div className="mx-auto max-w-xl py-16 text-center">
+        <h1 className="text-h1 tracking-tight text-text-primary">
+          Proyecto no encontrado
+        </h1>
+        <p className="mt-3 text-body text-text-secondary">
+          Puede que no esté publicado o que la dirección haya cambiado.
+        </p>
+        <div className="mt-8">
+          <LinkButton to="/work" variant="primary">
+            Volver a proyectos
           </LinkButton>
         </div>
-      </Section>
+      </div>
     )
   }
 
   if (state.status === 'error') {
     return (
-      <Section>
-        <ErrorState message={state.message} onRetry={retry} />
-      </Section>
+      <ErrorState message="No se pudo cargar este proyecto." onRetry={retry} />
     )
   }
 
-  const project = state.data
+  return <CaseStudy project={state.data} />
+}
+
+function CaseStudy({ project }: { project: ProjectDetail }) {
+  const stack =
+    project.technologies.length > 0
+      ? project.technologies.map((item) => item.name).join(' · ')
+      : null
 
   return (
-    <Section>
-      <SectionHeader
-        heading="h1"
-        eyebrow="Work"
+    <article>
+      <CaseStudyHero
         title={project.title}
-        description={project.summary}
+        subtitle={project.subtitle}
+        summary={project.summary}
+        role={project.role}
+        period={project.period}
+        technologies={project.technologies}
+        cover={
+          project.images.find((image) => image.is_cover) ??
+          project.images[0] ??
+          null
+        }
       />
+      <ProjectOverview
+        role={project.role}
+        stack={stack}
+        context={project.context}
+      />
+      <Prose title="Problem" text={project.problem} />
+      <Prose title="My Role" text={project.responsibilities} />
+      <Prose title="Solution" text={project.solution} />
+      <Prose title="Technical Decisions" text={project.technical_decisions} />
+      <Prose title="Challenges" text={project.challenges} />
+      <Prose title="Results" text={project.results} />
+      <Prose title="Learnings" text={project.learnings} />
       {project.technologies.length > 0 ? (
-        <ul className="mt-6 flex flex-wrap gap-2">
-          {project.technologies.map((item) => (
-            <li key={item.id}>
-              <TechnologyBadge name={item.name} />
-            </li>
-          ))}
-        </ul>
+        <section className="border-t border-border py-10">
+          <h2 className="text-h2 tracking-tight text-text-primary">
+            Technologies
+          </h2>
+          <ul className="mt-4 flex max-w-2xl flex-wrap gap-2">
+            {project.technologies.map((item) => (
+              <li key={item.id}>
+                <TechnologyBadge name={item.name} />
+              </li>
+            ))}
+          </ul>
+        </section>
       ) : null}
-      <p className="mt-8 text-body text-text-secondary">
-        Case study completo próximamente.
-      </p>
-      <div className="mt-8">
-        <LinkButton to="/work" variant="ghost" className="w-fit px-3">
-          Volver al listado
+      <ProjectGallery images={project.images} />
+      <div className="border-t border-border py-10">
+        <LinkButton to="/work" variant="secondary">
+          Back to Work
         </LinkButton>
       </div>
-    </Section>
+    </article>
+  )
+}
+
+function Prose({ title, text }: { title: string; text: string | null }) {
+  if (!text) {
+    return null
+  }
+
+  return (
+    <CaseStudySection title={title}>
+      <p>{text}</p>
+    </CaseStudySection>
   )
 }

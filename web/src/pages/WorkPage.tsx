@@ -29,7 +29,7 @@ export function WorkPage() {
         heading="h1"
         eyebrow="Work"
         title="Proyectos"
-        description="Casos publicados. El detalle completo de cada uno llega después."
+        description="Casos publicados."
       />
       <div className="mt-8">
         {state.status === 'loading' ? (
