@@ -9,11 +9,9 @@ const publicPaths = [
   '/work',
   '/about',
   '/contact',
-  '/work/saas-logistics-platform',
   '/work/multichannel-notifications',
   '/work/white-label-tracking',
   '/work/customer-support-desk',
-  '/work/legacy-modernization',
   '/work/settings-spa-modernization',
 ]
 

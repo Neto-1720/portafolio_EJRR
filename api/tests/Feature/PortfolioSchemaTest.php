@@ -97,7 +97,7 @@ class PortfolioSchemaTest extends TestCase
 
         $this->assertDatabaseCount('technologies', 15);
         $this->assertDatabaseCount('projects', 6);
-        $this->assertDatabaseCount('project_images', 6);
+        $this->assertDatabaseCount('project_images', 20);
         $this->assertDatabaseCount('certifications', 2);
         $this->assertNull(
             Certification::query()->where('name', 'React para principiantes')->value('issuer'),

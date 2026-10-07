@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ProjectCover } from '../../assets/covers/ProjectCover.tsx'
+import { ScreenshotStage } from './ScreenshotStage.tsx'
 import { TechnologyBadge } from '../../components/content/TechnologyBadge.tsx'
 import { LinkButton } from '../../components/ui/LinkButton.tsx'
 import { demoForProject } from '../demos/catalog.ts'
@@ -70,22 +71,18 @@ export function CaseStudyHero({
           </LinkButton>
         </div>
       </div>
-      <div className="overflow-hidden rounded-xl border border-border shadow-md">
-        {coverSrc ? (
-          <img
-            src={coverSrc}
-            alt={cover?.alt_text?.trim() || title}
-            fetchPriority="high"
-            decoding="async"
-            className="aspect-[16/10] w-full object-contain"
-            onError={() => setFailedSrc(coverSrc)}
-          />
-        ) : (
-          <div className="aspect-[16/10]">
-            <ProjectCover slug={slug} title={title} />
-          </div>
-        )}
-      </div>
+      {coverSrc ? (
+        <ScreenshotStage
+          src={coverSrc}
+          alt={cover?.alt_text?.trim() || title}
+          priority
+          onError={() => setFailedSrc(coverSrc)}
+        />
+      ) : (
+        <div className="aspect-[16/10] overflow-hidden rounded-xl border border-border shadow-md">
+          <ProjectCover slug={slug} title={title} />
+        </div>
+      )}
     </header>
   )
 }

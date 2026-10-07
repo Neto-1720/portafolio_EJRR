@@ -30,14 +30,168 @@ class ProjectSeeder extends Seeder
 
             $project->technologies()->sync($technologyIds);
 
-            $project->images()->create([
+            foreach ($this->imagesFor($project) as $image) {
+                $project->images()->create($image);
+            }
+        }
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function imagesFor(Project $project): array
+    {
+        if ($project->slug === 'multichannel-notifications') {
+            return [
+                [
+                    'path' => '/projects/notifications/cover.webp',
+                    'alt_text' => 'Vista general del sistema de notificaciones multicanal con métricas y configuración.',
+                    'caption' => 'Vista general del sistema de notificaciones multicanal, con métricas, configuración de eventos y administración de canales desde una sola interfaz.',
+                    'sort_order' => 1,
+                    'is_cover' => true,
+                ],
+                [
+                    'path' => '/projects/notifications/01-event-configuration.webp',
+                    'alt_text' => 'Configuración de eventos y canales de notificación.',
+                    'caption' => 'Configuración de eventos y canales para controlar qué comunicaciones se envían durante cada etapa de la operación.',
+                    'sort_order' => 2,
+                    'is_cover' => false,
+                ],
+                [
+                    'path' => '/projects/notifications/02-notification-center.webp',
+                    'alt_text' => 'Centro de notificaciones con eventos agrupados por categoría.',
+                    'caption' => 'Centro de notificaciones que centraliza eventos operativos y mensajes relacionados con envíos, pagos y seguimiento.',
+                    'sort_order' => 3,
+                    'is_cover' => false,
+                ],
+                [
+                    'path' => '/projects/notifications/03-whatsapp.webp',
+                    'alt_text' => 'Notificación transaccional de seguimiento enviada por WhatsApp.',
+                    'caption' => 'Ejemplo de notificación transaccional enviada por WhatsApp durante el seguimiento de un envío.',
+                    'sort_order' => 4,
+                    'is_cover' => false,
+                ],
+                [
+                    'path' => '/projects/notifications/04-email.webp',
+                    'alt_text' => 'Correo transaccional con información y progreso de un envío.',
+                    'caption' => 'Plantilla de correo transaccional con estado del envío y representación visual de su recorrido.',
+                    'sort_order' => 5,
+                    'is_cover' => false,
+                ],
+            ];
+        }
+
+        if ($project->slug === 'white-label-tracking') {
+            return [[
+                'path' => '/projects/tracking/cover.webp',
+                'alt_text' => 'Portal de rastreo con el resultado de una guía, línea de estado y banner publicitario.',
+                'caption' => 'Portal de rastreo con marca configurable: búsqueda de guías, estado del envío, historial de eventos y un espacio para publicidad propia de cada marca.',
+                'sort_order' => 1,
+                'is_cover' => true,
+            ]];
+        }
+
+        if ($project->slug === 'customer-support-desk') {
+            return [
+                [
+                    'path' => '/projects/support/cover.webp',
+                    'alt_text' => 'Vista principal de una mesa de atención con lista de conversaciones, chat y panel de información.',
+                    'caption' => 'Vista principal de la mesa de atención, diseñada para concentrar conversaciones, contexto del cliente y herramientas operativas en una sola interfaz.',
+                    'sort_order' => 1,
+                    'is_cover' => true,
+                ],
+                [
+                    'path' => '/projects/support/01-chat-dark.webp',
+                    'alt_text' => 'Mesa de atención en modo oscuro con conversación y panel lateral.',
+                    'caption' => 'La misma experiencia operativa en modo oscuro, manteniendo jerarquía visual y legibilidad durante sesiones prolongadas de atención.',
+                    'sort_order' => 2,
+                    'is_cover' => false,
+                ],
+                [
+                    'path' => '/projects/support/02-profile.webp',
+                    'alt_text' => 'Vista de perfil del asesor dentro de la mesa de atención.',
+                    'caption' => 'Perfil del asesor integrado dentro del mismo entorno, con información básica y controles de sesión.',
+                    'sort_order' => 3,
+                    'is_cover' => false,
+                ],
+                [
+                    'path' => '/projects/support/03-notes.webp',
+                    'alt_text' => 'Sección de notas internas de la mesa de atención.',
+                    'caption' => 'Espacio de notas internas para registrar contexto personal y apuntes relacionados con la atención.',
+                    'sort_order' => 4,
+                    'is_cover' => false,
+                ],
+                [
+                    'path' => '/projects/support/04-calendar.webp',
+                    'alt_text' => 'Calendario y recordatorios dentro de la mesa de atención.',
+                    'caption' => 'Calendario operativo para organizar recordatorios y tareas asociadas al seguimiento de atención.',
+                    'sort_order' => 5,
+                    'is_cover' => false,
+                ],
+                [
+                    'path' => '/projects/support/05-evaluations.webp',
+                    'alt_text' => 'Panel de evaluaciones y métricas de atención.',
+                    'caption' => 'Vista de evaluaciones y métricas de atención para consultar actividad, tiempos y resultados del asesor.',
+                    'sort_order' => 6,
+                    'is_cover' => false,
+                ],
+                [
+                    'path' => '/projects/support/06-settings.webp',
+                    'alt_text' => 'Pantalla de ajustes y personalización de la mesa de atención.',
+                    'caption' => 'Configuración personal de la interfaz, incluyendo preferencias visuales y opciones de cuenta.',
+                    'sort_order' => 7,
+                    'is_cover' => false,
+                ],
+            ];
+        }
+
+        if ($project->slug !== 'settings-spa-modernization') {
+            return [[
                 'path' => "projects/{$project->slug}/cover.webp",
                 'alt_text' => $project->title,
                 'caption' => null,
                 'sort_order' => 0,
                 'is_cover' => true,
-            ]);
+            ]];
         }
+
+        return [
+            [
+                'path' => '/projects/settings-spa/cover.webp',
+                'alt_text' => 'Vista general de la sección Settings SPA con accesos de configuración.',
+                'caption' => 'Vista general de la sección de configuración modernizada como SPA, con acceso centralizado a múltiples módulos.',
+                'sort_order' => 1,
+                'is_cover' => true,
+            ],
+            [
+                'path' => '/projects/settings-spa/02-module-detail.webp',
+                'alt_text' => 'Vista interna de un módulo integrado dentro de la sección Settings SPA.',
+                'caption' => 'Módulo interno integrado bajo el mismo sistema visual, con resumen, filtros y listado en una sola vista.',
+                'sort_order' => 2,
+                'is_cover' => false,
+            ],
+            [
+                'path' => '/projects/settings-spa/03-search-discovery.webp',
+                'alt_text' => 'Buscador de configuraciones y navegación entre módulos en Settings SPA.',
+                'caption' => 'Buscador y sistema de descubrimiento para acceder rápidamente a herramientas y configuraciones dentro de la SPA.',
+                'sort_order' => 3,
+                'is_cover' => false,
+            ],
+            [
+                'path' => '/projects/settings-spa/04-feature-view.webp',
+                'alt_text' => 'Sección de perfil dentro de Settings SPA, con navegación lateral de ajustes.',
+                'caption' => 'Vista de cuenta dentro de la misma navegación, con secciones agrupadas y una vista previa del perfil.',
+                'sort_order' => 4,
+                'is_cover' => false,
+            ],
+            [
+                'path' => '/projects/settings-spa/05-package-list.webp',
+                'alt_text' => 'Listado en tabla de una funcionalidad de configuración.',
+                'caption' => 'Listado de plantillas en una vista de tabla, dentro del mismo flujo de configuración.',
+                'sort_order' => 5,
+                'is_cover' => false,
+            ],
+        ];
     }
 
     /**
@@ -62,7 +216,7 @@ class ProjectSeeder extends Seeder
                 'role' => 'Full Stack Developer',
                 'period' => null,
                 'is_featured' => true,
-                'is_published' => true,
+                'is_published' => false,
                 'sort_order' => 1,
                 'technologies' => ['laravel', 'php', 'react', 'typescript', 'postgresql', 'rest-apis', 'playwright'],
             ],
@@ -142,7 +296,7 @@ class ProjectSeeder extends Seeder
                 'role' => 'Full Stack Developer',
                 'period' => null,
                 'is_featured' => false,
-                'is_published' => true,
+                'is_published' => false,
                 'sort_order' => 5,
                 'technologies' => ['laravel', 'php', 'react', 'typescript', 'vite', 'mysql', 'git'],
             ],

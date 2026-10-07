@@ -27,10 +27,10 @@ class PublicPortfolioApiTest extends TestCase
         $response = $this->getJson('/api/projects');
 
         $response->assertOk();
-        $response->assertJsonCount(6, 'data');
-        $response->assertJsonPath('data.0.slug', 'saas-logistics-platform');
-        $response->assertJsonPath('data.0.cover_image.path', 'projects/saas-logistics-platform/cover.webp');
-        $response->assertJsonPath('data.4.slug', 'legacy-modernization');
+        $response->assertJsonCount(4, 'data');
+        $response->assertJsonPath('data.0.slug', 'multichannel-notifications');
+        $response->assertJsonPath('data.0.cover_image.path', '/projects/notifications/cover.webp');
+        $response->assertJsonPath('data.3.slug', 'settings-spa-modernization');
 
         $card = $response->json('data.0');
         $this->assertSame([
@@ -47,7 +47,10 @@ class PublicPortfolioApiTest extends TestCase
         ], array_keys($card));
         $this->assertNotEmpty($card['technologies']);
         $this->assertArrayNotHasKey('pivot', $card['technologies'][0]);
-        $this->assertNotContains('borrador', collect($response->json('data'))->pluck('slug'));
+        $slugs = collect($response->json('data'))->pluck('slug');
+        $this->assertNotContains('borrador', $slugs);
+        $this->assertNotContains('saas-logistics-platform', $slugs);
+        $this->assertNotContains('legacy-modernization', $slugs);
     }
 
     public function test_featured_filter_returns_only_featured_published_projects(): void
@@ -59,7 +62,6 @@ class PublicPortfolioApiTest extends TestCase
 
         $response->assertOk();
         $response->assertJsonPath('data.*.slug', [
-            'saas-logistics-platform',
             'customer-support-desk',
             'settings-spa-modernization',
         ]);
@@ -70,10 +72,10 @@ class PublicPortfolioApiTest extends TestCase
     {
         $this->seed();
 
-        $response = $this->getJson('/api/projects/saas-logistics-platform');
+        $response = $this->getJson('/api/projects/customer-support-desk');
 
         $response->assertOk();
-        $response->assertJsonPath('data.slug', 'saas-logistics-platform');
+        $response->assertJsonPath('data.slug', 'customer-support-desk');
         $response->assertJsonPath('data.images.0.is_cover', true);
         $this->assertNotEmpty($response->json('data.context'));
         $this->assertNotEmpty($response->json('data.technologies'));
@@ -88,6 +90,8 @@ class PublicPortfolioApiTest extends TestCase
 
         $this->getJson('/api/projects/no-existe')->assertNotFound();
         $this->getJson('/api/projects/borrador')->assertNotFound();
+        $this->getJson('/api/projects/saas-logistics-platform')->assertNotFound();
+        $this->getJson('/api/projects/legacy-modernization')->assertNotFound();
     }
 
     public function test_cover_image_falls_back_and_can_be_null(): void

@@ -15,16 +15,16 @@ test('recorre home, work, un case study y una demo', async ({ page }) => {
     'Proyectos',
   )
 
-  await page.getByRole('link', { name: 'SaaS Logistics Platform' }).click()
-  await expect(page).toHaveURL(/\/work\/saas-logistics-platform$/)
+  await page.getByRole('link', { name: 'Customer Support Desk' }).click()
+  await expect(page).toHaveURL(/\/work\/customer-support-desk$/)
   await expect(page.getByRole('heading', { level: 1 })).toContainText(
-    'SaaS Logistics Platform',
+    'Customer Support Desk',
   )
 
-  await page.getByRole('link', { name: 'Open Demo' }).click()
-  await expect(page).toHaveURL(/\/demo\/logistics$/)
+  await page.getByRole('link', { name: 'Open Demo' }).first().click()
+  await expect(page).toHaveURL(/\/demo\/support$/)
   await page.getByRole('link', { name: 'Back to case study' }).click()
-  await expect(page).toHaveURL(/\/work\/saas-logistics-platform$/)
+  await expect(page).toHaveURL(/\/work\/customer-support-desk$/)
 })
 
 test('envía el formulario de contacto', async ({ page }) => {

@@ -1,8 +1,9 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useState } from 'react'
+import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import type { ProjectImage } from '../../types/portfolio.ts'
 import { imageUrl } from '../../utils/publicUrl.ts'
 import { ImagePlaceholder } from './ImagePlaceholder.tsx'
+import { ScreenshotStage } from './ScreenshotStage.tsx'
 
 type ProjectGalleryCarouselProps = {
   images: ProjectImage[]
@@ -16,8 +17,27 @@ export function ProjectGalleryCarousel({
   const slides = images.filter((image) => imageUrl(image))
   const [index, setIndex] = useState(0)
   const [failed, setFailed] = useState<number[]>([])
+  const [playing, setPlaying] = useState(true)
+  const [hold, setHold] = useState(false)
   const current = Math.min(index, Math.max(slides.length - 1, 0))
   const slide = slides[current]
+
+  useEffect(() => {
+    if (!playing || hold || slides.length < 2) {
+      return
+    }
+
+    const media = window.matchMedia?.('(prefers-reduced-motion: reduce)')
+    if (media?.matches) {
+      return
+    }
+
+    const timer = window.setInterval(() => {
+      setIndex((value) => (value + 1) % slides.length)
+    }, 4200)
+
+    return () => window.clearInterval(timer)
+  }, [playing, hold, slides.length])
 
   if (!slide) {
     return <ImagePlaceholder label={title} large />
@@ -28,7 +48,8 @@ export function ProjectGalleryCarousel({
   const showControls = slides.length > 1
 
   function go(next: number) {
-    setIndex(Math.min(Math.max(next, 0), slides.length - 1))
+    const count = slides.length
+    setIndex(((next % count) + count) % count)
   }
 
   return (
@@ -38,6 +59,16 @@ export function ProjectGalleryCarousel({
       aria-label={`Capturas de ${title}`}
       tabIndex={0}
       className="focus-ring max-w-full rounded-xl outline-none"
+      onMouseEnter={() => setHold(true)}
+      onMouseLeave={() => setHold(false)}
+      onFocus={() => setHold(true)}
+      onBlur={(event) => {
+        const next = event.relatedTarget
+        if (next instanceof Node && event.currentTarget.contains(next)) {
+          return
+        }
+        setHold(false)
+      }}
       onKeyDown={(event) => {
         if (event.key === 'ArrowRight') {
           event.preventDefault()
@@ -70,24 +101,15 @@ export function ProjectGalleryCarousel({
         }
       }}
     >
-      <figure className="overflow-hidden rounded-xl border border-border bg-surface-secondary">
-        {src && !failed.includes(slide.id) ? (
-          <img
-            src={src}
-            alt={alt}
-            loading="lazy"
-            decoding="async"
-            className="aspect-[16/10] w-full bg-surface-secondary object-contain"
-            onError={() => setFailed((ids) => [...ids, slide.id])}
-          />
-        ) : (
-          <ImagePlaceholder label={alt} large />
-        )}
-      </figure>
-      <p className="sr-only" aria-live="polite">
-        {alt}
-        {slide.caption ? `. ${slide.caption}` : ''}
-      </p>
+      {src && !failed.includes(slide.id) ? (
+        <ScreenshotStage
+          src={src}
+          alt={alt}
+          onError={() => setFailed((ids) => [...ids, slide.id])}
+        />
+      ) : (
+        <ImagePlaceholder label={alt} large />
+      )}
       {slide.caption ? (
         <p className="mt-3 text-caption break-words text-text-muted">
           {slide.caption}
@@ -98,21 +120,32 @@ export function ProjectGalleryCarousel({
           <div className="flex gap-2">
             <button
               type="button"
-              className="focus-ring inline-flex size-10 items-center justify-center rounded-md border border-border bg-surface text-text-primary shadow-sm disabled:opacity-40"
+              className="focus-ring inline-flex size-10 items-center justify-center rounded-md border border-border bg-surface text-text-primary shadow-sm"
               aria-label="Imagen anterior"
-              disabled={current === 0}
               onClick={() => go(current - 1)}
             >
               <ChevronLeft className="size-4" aria-hidden="true" />
             </button>
             <button
               type="button"
-              className="focus-ring inline-flex size-10 items-center justify-center rounded-md border border-border bg-surface text-text-primary shadow-sm disabled:opacity-40"
+              className="focus-ring inline-flex size-10 items-center justify-center rounded-md border border-border bg-surface text-text-primary shadow-sm"
               aria-label="Imagen siguiente"
-              disabled={current === slides.length - 1}
               onClick={() => go(current + 1)}
             >
               <ChevronRight className="size-4" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="focus-ring inline-flex size-10 items-center justify-center rounded-md border border-border bg-surface text-text-primary shadow-sm"
+              aria-label={playing ? 'Pausar carrusel' : 'Reanudar carrusel'}
+              aria-pressed={!playing}
+              onClick={() => setPlaying((value) => !value)}
+            >
+              {playing ? (
+                <Pause className="size-4" aria-hidden="true" />
+              ) : (
+                <Play className="size-4" aria-hidden="true" />
+              )}
             </button>
           </div>
           <div
