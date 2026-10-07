@@ -14,6 +14,7 @@ const publicPaths = [
   '/work/white-label-tracking',
   '/work/customer-support-desk',
   '/work/legacy-modernization',
+  '/work/settings-spa-modernization',
 ]
 
 function sitemapPlugin(siteUrl: string | undefined): Plugin {

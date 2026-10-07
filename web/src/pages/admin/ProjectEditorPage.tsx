@@ -337,16 +337,57 @@ function ImageManager({
 }) {
   const [error, setError] = useState('')
 
-  async function upload(file: File) {
+  async function upload(files: File[]) {
     setError('')
-    const form = new FormData()
-    form.set('image', file)
-    form.set('sort_order', String(images.length))
-    form.set('is_cover', images.length === 0 ? '1' : '0')
+    let current = images
 
     try {
-      const image = await uploadProjectImage(projectId, form)
-      onChange(image.is_cover ? [...images.map((item) => ({ ...item, is_cover: false })), image] : [...images, image])
+      for (const file of files) {
+        const form = new FormData()
+        form.set('image', file)
+        form.set('sort_order', String(current.length))
+        form.set('is_cover', current.length === 0 ? '1' : '0')
+        const image = await uploadProjectImage(projectId, form)
+        current = image.is_cover
+          ? [...current.map((item) => ({ ...item, is_cover: false })), image]
+          : [...current, image]
+        onChange(current)
+      }
+    } catch (caught) {
+      report(caught, setError, onAuthError)
+    }
+  }
+
+  async function move(index: number, direction: -1 | 1) {
+    const ordered = [...images].sort((a, b) => a.sort_order - b.sort_order || a.id - b.id)
+    const current = ordered[index]
+    const neighbor = ordered[index + direction]
+    if (!current || !neighbor) return
+
+    const currentOrder = index
+    const neighborOrder = index + direction
+    setError('')
+
+    try {
+      const savedCurrent = await updateProjectImage(projectId, current.id, {
+        alt_text: current.alt_text,
+        caption: current.caption,
+        sort_order: neighborOrder,
+        is_cover: current.is_cover,
+      })
+      const savedNeighbor = await updateProjectImage(projectId, neighbor.id, {
+        alt_text: neighbor.alt_text,
+        caption: neighbor.caption,
+        sort_order: currentOrder,
+        is_cover: neighbor.is_cover,
+      })
+      onChange(
+        images.map((item) => {
+          if (item.id === savedCurrent.id) return savedCurrent
+          if (item.id === savedNeighbor.id) return savedNeighbor
+          return item
+        }),
+      )
     } catch (caught) {
       report(caught, setError, onAuthError)
     }
@@ -387,16 +428,17 @@ function ImageManager({
   return (
     <section className="mt-6 space-y-4 rounded-lg border border-border bg-surface p-5">
       <h2 className="text-h3">Images</h2>
-      <Field label="Subir imagen" htmlFor="image-file">
+      <Field label="Subir imágenes" htmlFor="image-file">
         <input
           id="image-file"
           className={adminField}
           type="file"
           accept="image/jpeg,image/png,image/webp"
+          multiple
           onChange={(event) => {
-            const file = event.target.files?.[0]
+            const files = [...(event.target.files ?? [])]
             event.target.value = ''
-            if (file) void upload(file)
+            if (files.length > 0) void upload(files)
           }}
         />
       </Field>
@@ -406,7 +448,9 @@ function ImageManager({
         </p>
       ) : null}
       <ul className="space-y-4">
-        {images.map((image) => {
+        {[...images]
+          .sort((a, b) => a.sort_order - b.sort_order || a.id - b.id)
+          .map((image, index, ordered) => {
           const src = imageUrl(image)
           return (
             <li key={image.id} className="rounded-md border border-border p-3">
@@ -442,6 +486,26 @@ function ImageManager({
                   />
                   Portada
                 </label>
+                {ordered.length > 1 ? (
+                  <>
+                    <button
+                      type="button"
+                      className="focus-ring text-text-secondary disabled:opacity-40"
+                      disabled={index === 0}
+                      onClick={() => void move(index, -1)}
+                    >
+                      Mover arriba
+                    </button>
+                    <button
+                      type="button"
+                      className="focus-ring text-text-secondary disabled:opacity-40"
+                      disabled={index === ordered.length - 1}
+                      onClick={() => void move(index, 1)}
+                    >
+                      Mover abajo
+                    </button>
+                  </>
+                ) : null}
                 <button type="button" className="focus-ring text-danger" onClick={() => void remove(image.id)}>
                   Eliminar imagen
                 </button>

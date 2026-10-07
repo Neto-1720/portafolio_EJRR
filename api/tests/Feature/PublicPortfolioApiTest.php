@@ -27,7 +27,7 @@ class PublicPortfolioApiTest extends TestCase
         $response = $this->getJson('/api/projects');
 
         $response->assertOk();
-        $response->assertJsonCount(5, 'data');
+        $response->assertJsonCount(6, 'data');
         $response->assertJsonPath('data.0.slug', 'saas-logistics-platform');
         $response->assertJsonPath('data.0.cover_image.path', 'projects/saas-logistics-platform/cover.webp');
         $response->assertJsonPath('data.4.slug', 'legacy-modernization');
@@ -60,8 +60,8 @@ class PublicPortfolioApiTest extends TestCase
         $response->assertOk();
         $response->assertJsonPath('data.*.slug', [
             'saas-logistics-platform',
-            'multichannel-notifications',
             'customer-support-desk',
+            'settings-spa-modernization',
         ]);
         $response->assertJsonMissing(['slug' => 'borrador']);
     }

@@ -18,9 +18,13 @@ La iconografía es [Lucide](https://lucide.dev/) (`lucide-react`). Entra en nave
 
 Cada proyecto publicado tiene una cover abstracta en `web/src/assets/covers/ProjectCover.tsx`. No son fotos ni imágenes de stock. Usan iconos, bloques de interfaz y los tokens del tema, así que cambian con el modo oscuro.
 
-La cover aparece en la tarjeta y en el hero del case study cuando no hay un archivo real. Si la API devuelve una `url` usable, esa imagen reemplaza la cover. La galería sin archivo usa `ImagePlaceholder`.
+La cover aparece en la tarjeta y en el hero del case study cuando no hay un archivo real. Si la API devuelve una `url` usable marcada como portada, esa imagen reemplaza la cover. Si esa imagen no carga, vuelve la cover abstracta. La galería sin archivo usable usa `ImagePlaceholder`.
 
-Las cinco covers son logística, avisos, rastreo, soporte y modernización. Comparten el mismo marco (punto, etiqueta, superficie) y cambian la composición.
+Las covers son logística, avisos, rastreo, soporte, modernización y settings. Comparten el mismo marco (punto, etiqueta, superficie) y cambian la composición.
+
+## Capturas
+
+`ProjectGalleryCarousel` muestra las imágenes de `project_images` que ya tienen URL. El marco, los controles, el caption y el fondo usan los tokens del tema. La captura en sí no se altera para el modo oscuro. La estrategia de archivos y la lista de privacidad están en [case-studies.md](case-studies.md).
 
 ## Hero
 

@@ -1,4 +1,11 @@
-import { ArrowRight, Mail, MapPin, MessageCircle, Package } from 'lucide-react'
+import {
+  ArrowRight,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Package,
+  SlidersHorizontal,
+} from 'lucide-react'
 import type { ReactNode } from 'react'
 
 const covers: Record<string, () => ReactNode> = {
@@ -7,6 +14,7 @@ const covers: Record<string, () => ReactNode> = {
   'white-label-tracking': TrackingCover,
   'customer-support-desk': SupportCover,
   'legacy-modernization': LegacyCover,
+  'settings-spa-modernization': SettingsCover,
 }
 
 export function ProjectCover({
@@ -177,6 +185,28 @@ function LegacyCover() {
             After
           </span>
           <span className="mt-2 block h-6 rounded-md bg-accent-soft" />
+          <span className="mt-1.5 block h-4 rounded-md bg-surface-secondary" />
+        </div>
+      </div>
+    </CoverShell>
+  )
+}
+
+function SettingsCover() {
+  return (
+    <CoverShell label="Settings">
+      <div className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-2">
+        <div className="space-y-1.5 rounded-md border border-border bg-surface p-2">
+          <span className="block h-1.5 rounded-sm bg-accent" />
+          <span className="block h-1.5 rounded-sm bg-border" />
+          <span className="block h-1.5 rounded-sm bg-border" />
+        </div>
+        <div className="rounded-lg border border-border bg-surface p-2 shadow-sm">
+          <span className="inline-flex items-center gap-1.5 font-mono text-caption text-text-secondary">
+            <SlidersHorizontal className="size-3.5 text-accent" />
+            Modules
+          </span>
+          <span className="mt-2 block h-5 rounded-md bg-accent-soft" />
           <span className="mt-1.5 block h-4 rounded-md bg-surface-secondary" />
         </div>
       </div>

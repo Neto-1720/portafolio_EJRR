@@ -1,6 +1,6 @@
 # Case studies
 
-`/work/:slug` usa una sola página. Los cinco proyectos comparten la misma estructura y leen `GET /api/projects/{slug}`.
+`/work/:slug` usa una sola página. Los seis proyectos comparten la misma estructura y leen `GET /api/projects/{slug}`.
 
 ## Secciones
 
@@ -17,13 +17,41 @@ web/src/features/work/
   CaseStudySkeleton.tsx
   ProjectOverview.tsx
   ProjectGallery.tsx
+  ProjectGalleryCarousel.tsx
   ImagePlaceholder.tsx
 ```
 
 ## Imágenes
 
-Solo se pide una imagen si `path` es `http://`, `https://` o empieza por `/`. Una ruta de Storage se sustituye por el placeholder. La galería pone la primera imagen grande y el resto en una retícula de dos columnas. No hay carrusel ni lightbox.
+La portada del hero y de la tarjeta usa el screenshot marcado como `is_cover` solo si `url` o `path` es `http://`, `https://` o empieza por `/`. Si el archivo no existe, o la imagen falla al cargar, se mantiene `ProjectCover`.
+
+La Gallery muestra `ProjectGalleryCarousel` cuando hay una o más capturas con URL usable. Si no hay ninguna, se queda el placeholder premium con el título del proyecto. El carrusel no avanza solo. Con varias imágenes hay anterior, siguiente, indicadores, caption y alt. Las flechas del teclado mueven la imagen cuando el carrusel tiene foco. En táctil, un desplazamiento horizontal cambia de imagen. La primera captura visible carga enseguida; las siguientes usan `loading="lazy"`.
+
+Settings SPA Modernization no tiene mini demo propia. El caso enlaza la demo de Legacy Platform Modernization, que ya muestra un corte parecido.
+
+## Dónde dejar las capturas
+
+```
+web/public/projects/
+  logistics/
+  notifications/
+  tracking/
+  support/
+  legacy/
+  settings-spa/
+```
+
+Nombres previstos: `cover.webp`, `01-overview.webp`, `02-detail.webp`, `03-mobile.webp`. Conviene exportarlas en WebP, con el lado largo cerca de 1600 px, antes de subirlas. La aplicación no las comprime en runtime.
+
+El admin sigue subiendo jpeg, png o webp a `project_images` (alt, caption, portada y orden). Una ruta pública como `/projects/logistics/01-overview.webp` también vale si queda guardada en `path`: el carrusel la usa sin pasar por Storage.
 
 ## Anonimización
 
 Los textos públicos no llevan clientes, teléfonos, correos, guías, direcciones, precios, tokens, llaves, URLs privadas ni nombres internos de producto. Las capturas reales entran después, ya anonimizadas.
+
+Antes de registrar una captura:
+
+- recortar o tapar clientes, teléfonos, correos y direcciones;
+- quitar guías, IDs, precios y datos contractuales;
+- quitar tokens, llaves y URLs privadas;
+- no depender de OCR ni de interpretación automática del contenido.

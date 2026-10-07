@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { ProjectCover } from '../../assets/covers/ProjectCover.tsx'
 import { TechnologyBadge } from '../../components/content/TechnologyBadge.tsx'
 import { LinkButton } from '../../components/ui/LinkButton.tsx'
@@ -26,7 +27,9 @@ export function CaseStudyHero({
   cover,
   slug,
 }: CaseStudyHeroProps) {
-  const coverSrc = imageUrl(cover)
+  const src = imageUrl(cover)
+  const [failedSrc, setFailedSrc] = useState<string | null>(null)
+  const coverSrc = src && src !== failedSrc ? src : null
   const demo = demoForProject(slug)
 
   return (
@@ -71,10 +74,11 @@ export function CaseStudyHero({
         {coverSrc ? (
           <img
             src={coverSrc}
-            alt={cover?.alt_text ?? ''}
+            alt={cover?.alt_text?.trim() || title}
             fetchPriority="high"
             decoding="async"
-            className="aspect-[16/10] w-full object-cover"
+            className="aspect-[16/10] w-full object-contain"
+            onError={() => setFailedSrc(coverSrc)}
           />
         ) : (
           <div className="aspect-[16/10]">

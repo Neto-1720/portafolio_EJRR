@@ -12,6 +12,7 @@ import { imageUrl } from '../utils/publicUrl.ts'
 
 function coverImage(
   image: { url?: string | null; path: string; alt_text: string | null } | null,
+  title: string,
 ) {
   const src = imageUrl(image)
 
@@ -19,7 +20,7 @@ function coverImage(
     return null
   }
 
-  return { src, alt: image.alt_text ?? '' }
+  return { src, alt: image.alt_text?.trim() || title }
 }
 
 export function WorkPage() {
@@ -60,7 +61,7 @@ export function WorkPage() {
                 technologies={project.technologies.map((item) => item.name)}
                 href={`/work/${project.slug}`}
                 cta="Ver caso"
-                coverImage={coverImage(project.cover_image)}
+                coverImage={coverImage(project.cover_image, project.title)}
               />
             ))}
           </div>

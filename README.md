@@ -296,7 +296,7 @@ El flujo de admin lee `E2E_ADMIN_EMAIL` y `E2E_ADMIN_PASSWORD` del entorno. Si f
 
 Cada página pública define título y descripción en el cliente. `index.html` deja los de la home para el primer render. Canonical y `og:url` solo aparecen si `VITE_SITE_URL` está definido. No hay imagen Open Graph inventada: `og:image` se escribe cuando el case study tiene una URL real de imagen.
 
-`web/public/robots.txt` permite el sitio y bloquea `/admin`. No es un control de acceso. El sitemap se genera en `dist/sitemap.xml` durante `npm run build` cuando `VITE_SITE_URL` es `http` o `https`. Incluye `/`, `/work`, `/about`, `/contact` y los cinco case studies publicados. No incluye `/admin` ni `/demo`.
+`web/public/robots.txt` permite el sitio y bloquea `/admin`. No es un control de acceso. El sitemap se genera en `dist/sitemap.xml` durante `npm run build` cuando `VITE_SITE_URL` es `http` o `https`. Incluye `/`, `/work`, `/about`, `/contact` y los seis case studies publicados. No incluye `/admin` ni `/demo`.
 
 Es una SPA. Un crawler que no ejecuta JavaScript ve el título y la descripción de la home. No hay SSR.
 

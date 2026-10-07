@@ -123,14 +123,36 @@ function CaseStudy({ project }: { project: ProjectDetail }) {
           </ul>
         </section>
       ) : null}
-      <ProjectGallery images={project.images} />
+      <ProjectGallery images={project.images} title={project.title} />
       <DemoLink slug={project.slug} />
+      <RelatedLegacyNote slug={project.slug} />
       <div className="border-t border-border py-10">
         <LinkButton to="/work" variant="secondary">
           Back to Work
         </LinkButton>
       </div>
     </article>
+  )
+}
+
+function RelatedLegacyNote({ slug }: { slug: string }) {
+  if (slug !== 'settings-spa-modernization') {
+    return null
+  }
+
+  return (
+    <section className="border-t border-border py-10">
+      <h2 className="text-h2 tracking-tight text-text-primary">Related demo</h2>
+      <p className="mt-4 max-w-2xl text-body text-text-secondary">
+        Legacy Platform Modernization ya muestra este tipo de corte: una vista
+        clásica junto a una vista de componentes. Este caso no agrega otra demo.
+      </p>
+      <div className="mt-6">
+        <LinkButton to="/demo/legacy" variant="secondary">
+          Open the legacy demo
+        </LinkButton>
+      </div>
+    </section>
   )
 }
 
