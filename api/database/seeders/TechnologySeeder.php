@@ -31,7 +31,7 @@ class TechnologySeeder extends Seeder
         ];
 
         foreach ($technologies as $index => $technology) {
-            Technology::query()->create([
+            Technology::query()->firstOrCreate(['slug' => $technology['slug']], [
                 ...$technology,
                 'sort_order' => $index + 1,
             ]);

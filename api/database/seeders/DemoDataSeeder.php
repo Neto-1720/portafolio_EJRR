@@ -16,9 +16,17 @@ class DemoDataSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->seedShipments();
-        $this->seedNotifications();
-        $this->seedConversations();
+        if (! DemoShipment::query()->exists()) {
+            $this->seedShipments();
+        }
+
+        if (! DemoNotification::query()->exists()) {
+            $this->seedNotifications();
+        }
+
+        if (! DemoConversation::query()->exists()) {
+            $this->seedConversations();
+        }
     }
 
     private function seedShipments(): void

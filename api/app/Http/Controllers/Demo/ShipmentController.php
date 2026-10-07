@@ -25,10 +25,10 @@ class ShipmentController extends Controller
             ->when($validated['search'] ?? null, function ($query, string $search): void {
                 $term = '%'.$search.'%';
                 $query->where(function ($inner) use ($term): void {
-                    $inner->where('tracking_number', 'like', $term)
-                        ->orWhere('customer_name', 'like', $term)
-                        ->orWhere('origin', 'like', $term)
-                        ->orWhere('destination', 'like', $term);
+                    $inner->whereLike('tracking_number', $term)
+                        ->orWhereLike('customer_name', $term)
+                        ->orWhereLike('origin', $term)
+                        ->orWhereLike('destination', $term);
                 });
             })
             ->orderBy('id')

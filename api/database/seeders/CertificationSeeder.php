@@ -20,8 +20,7 @@ class CertificationSeeder extends Seeder
         ];
 
         foreach ($certifications as $index => $name) {
-            Certification::query()->create([
-                'name' => $name,
+            Certification::query()->firstOrCreate(['name' => $name], [
                 'issuer' => null,
                 'issued_at' => null,
                 'credential_url' => null,

@@ -23,8 +23,8 @@ class ConversationController extends Controller
             ->when($validated['search'] ?? null, function ($query, string $search): void {
                 $term = '%'.$search.'%';
                 $query->where(function ($inner) use ($term): void {
-                    $inner->where('customer_name', 'like', $term)
-                        ->orWhere('customer_identifier', 'like', $term);
+                    $inner->whereLike('customer_name', $term)
+                        ->orWhereLike('customer_identifier', $term);
                 });
             })
             ->orderByDesc('last_message_at')

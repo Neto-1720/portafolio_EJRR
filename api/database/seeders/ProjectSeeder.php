@@ -15,6 +15,10 @@ class ProjectSeeder extends Seeder
     public function run(): void
     {
         foreach ($this->projects() as $definition) {
+            if (Project::query()->where('slug', $definition['slug'])->exists()) {
+                continue;
+            }
+
             $technologySlugs = $definition['technologies'];
             unset($definition['technologies']);
 

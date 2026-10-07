@@ -122,4 +122,34 @@ class PortfolioSchemaTest extends TestCase
         $this->assertSame(4, $conversation->messages_count);
         $this->assertNotNull($conversation->last_message_at);
     }
+
+    public function test_database_seeder_can_run_again_without_overwriting_content(): void
+    {
+        $this->seed();
+
+        $project = Project::query()->where('slug', 'customer-support-desk')->firstOrFail();
+        $project->update(['title' => 'Título editado en admin', 'is_published' => false]);
+        $project->images()->delete();
+        Certification::query()->where('name', 'React para principiantes')->update(['issuer' => 'Emisor editado']);
+
+        $this->seed();
+
+        $this->assertDatabaseCount('technologies', 15);
+        $this->assertDatabaseCount('projects', 6);
+        $this->assertDatabaseCount('project_images', 13);
+        $this->assertDatabaseCount('certifications', 2);
+        $this->assertDatabaseCount('demo_shipments', 15);
+        $this->assertDatabaseCount('demo_notifications', 10);
+        $this->assertDatabaseCount('demo_conversations', 5);
+        $this->assertDatabaseCount('demo_messages', 20);
+
+        $project->refresh();
+
+        $this->assertSame('Título editado en admin', $project->title);
+        $this->assertFalse($project->is_published);
+        $this->assertSame(
+            'Emisor editado',
+            Certification::query()->where('name', 'React para principiantes')->value('issuer'),
+        );
+    }
 }
