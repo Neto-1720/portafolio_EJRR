@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin
+
+# sitemap.xml se escribe en el build cuando VITE_SITE_URL es una URL http o https.

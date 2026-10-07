@@ -32,6 +32,10 @@ storage/framework/views/
 *.sqlite
 *.sqlite-journal
 
+# Pruebas de navegador
+playwright-report/
+test-results/
+
 # Cachés y herramientas
 .phpunit.result.cache
 .phpunit.cache

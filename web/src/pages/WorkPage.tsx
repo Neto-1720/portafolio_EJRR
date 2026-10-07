@@ -6,6 +6,7 @@ import { LoadingState } from '../components/feedback/LoadingState.tsx'
 import { Section } from '../components/ui/Section.tsx'
 import { SectionHeader } from '../components/ui/SectionHeader.tsx'
 import { useRemoteData } from '../hooks/useRemoteData.ts'
+import { usePageMeta } from '../seo/usePageMeta.ts'
 import { getProjects } from '../services/projects.ts'
 import { imageUrl } from '../utils/publicUrl.ts'
 
@@ -22,6 +23,12 @@ function coverImage(
 }
 
 export function WorkPage() {
+  usePageMeta({
+    title: 'Projects — Ernesto Rodríguez',
+    description:
+      'Proyectos de SaaS, APIs REST e integraciones construidos con Laravel, React y TypeScript.',
+    path: '/work',
+  })
   const load = useCallback((signal: AbortSignal) => getProjects(signal), [])
   const { state, retry } = useRemoteData(load)
 

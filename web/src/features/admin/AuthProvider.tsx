@@ -6,9 +6,15 @@ import {
   logout as logoutRequest,
 } from '../../services/admin/auth.ts'
 import type { AdminUser } from '../../services/admin/types.ts'
-import { AuthContext, type AuthContextValue, type AuthStatus } from './useAuth.ts'
+import { useNoIndex } from '../../seo/usePageMeta.ts'
+import {
+  AuthContext,
+  type AuthContextValue,
+  type AuthStatus,
+} from './useAuth.ts'
 
 export function AuthProvider({ children }: { children?: ReactNode }) {
+  useNoIndex()
   const [user, setUser] = useState<AdminUser | null>(null)
   const [status, setStatus] = useState<AuthStatus>('loading')
 

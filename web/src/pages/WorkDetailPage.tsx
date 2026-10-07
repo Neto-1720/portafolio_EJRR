@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { useParams } from 'react-router'
 import { TechnologyBadge } from '../components/content/TechnologyBadge.tsx'
 import { ErrorState } from '../components/feedback/ErrorState.tsx'
@@ -11,7 +11,9 @@ import { ProjectGallery } from '../features/work/ProjectGallery.tsx'
 import { ProjectOverview } from '../features/work/ProjectOverview.tsx'
 import { useRemoteData } from '../hooks/useRemoteData.ts'
 import { getProject } from '../services/projects.ts'
+import { usePageMeta } from '../seo/usePageMeta.ts'
 import type { ProjectDetail } from '../types/portfolio.ts'
+import { imageUrl } from '../utils/publicUrl.ts'
 
 export function WorkDetailPage() {
   const { slug = '' } = useParams()
@@ -20,22 +22,27 @@ export function WorkDetailPage() {
     [slug],
   )
   const { state, retry } = useRemoteData(load, slug)
+  const cover =
+    state.status === 'ok'
+      ? (state.data.images.find((image) => image.is_cover) ??
+        state.data.images[0] ??
+        null)
+      : null
 
-  useEffect(() => {
-    const previous = document.title
-
-    if (state.status === 'ok') {
-      document.title = `${state.data.title} — Ernesto Rodríguez`
-    }
-
-    if (state.status === 'error' && state.statusCode === 404) {
-      document.title = 'Proyecto no encontrado — Ernesto Rodríguez'
-    }
-
-    return () => {
-      document.title = previous
-    }
-  }, [state])
+  usePageMeta({
+    title:
+      state.status === 'ok'
+        ? `${state.data.title} — Ernesto Rodríguez`
+        : state.status === 'error' && state.statusCode === 404
+          ? 'Proyecto no encontrado — Ernesto Rodríguez'
+          : 'Proyecto — Ernesto Rodríguez',
+    description:
+      state.status === 'ok'
+        ? state.data.summary
+        : 'Case study de un producto web construido con Laravel, React y TypeScript.',
+    path: `/work/${slug}`,
+    image: imageUrl(cover),
+  })
 
   if (state.status === 'loading') {
     return <CaseStudySkeleton />

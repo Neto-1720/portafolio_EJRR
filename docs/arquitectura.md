@@ -1,16 +1,22 @@
 # Arquitectura
 
-El navegador habla solo con la API de Laravel. Laravel es el único cliente de PostgreSQL y, más adelante, de Supabase Storage.
+El navegador habla solo con la API de Laravel. Laravel es el único cliente de PostgreSQL y de Storage.
 
 ```
 React (web/)
     ↓  REST
 Laravel (api/)
     ↓
-PostgreSQL en Supabase
+PostgreSQL
+    ↓
+Storage
+
+Queue (database) → Mail
 ```
 
-`GET /api/health` comprueba que esa cadena HTTP responde. No consulta la base de datos.
+En local, PostgreSQL puede sustituirse por SQLite y Storage por el disco `public`. Supabase queda preparado en variables de entorno, sin credenciales en el repositorio.
+
+`GET /api/health` comprueba que la API HTTP responde. No consulta la base de datos.
 
 La configuración de Postgres y de Supabase vive en variables de entorno (`api/.env.example`). No hay claves en el repositorio. El frontend no recibe `SUPABASE_SERVICE_ROLE_KEY` ni usa Supabase para leer o escribir datos.
 
@@ -43,9 +49,17 @@ Con Supabase, `DB_CONNECTION` es `pgsql` y `DB_SSLMODE` es `require`. Sin creden
 
 `certifications.issuer` es nullable. Si el emisor no se conoce, se guarda `null`.
 
+## Cola y correo
+
+`POST /api/contact` guarda el mensaje y despacha `SendContactNotification`. Con `QUEUE_CONNECTION=database` el formulario responde aunque el correo tarde. El job lee `PORTFOLIO_CONTACT_EMAIL`. En local, `MAIL_MAILER=log` escribe el aviso en el log. El detalle está en [contact.md](contact.md).
+
+## Storage
+
+Las imágenes de proyectos se suben desde el admin al disco `PORTFOLIO_MEDIA_DISK` (`public` en local). La API devuelve `url` cuando el archivo existe. El navegador no habla con Supabase.
+
 ## API pública
 
-React todavía no llama a estos endpoints. La lectura pública es:
+React consume estos endpoints a través de `web/src/services/`:
 
 - `GET /api/health`
 - `GET /api/projects`

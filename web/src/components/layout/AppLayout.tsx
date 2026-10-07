@@ -1,21 +1,24 @@
+import { Suspense } from 'react'
 import { Outlet } from 'react-router'
+import { LoadingState } from '../feedback/LoadingState.tsx'
 import { Container } from '../ui/Container.tsx'
+import { PersonJsonLd } from '../../seo/PersonJsonLd.tsx'
 import { Footer } from './Footer.tsx'
 import { Navbar } from './Navbar.tsx'
 
 export function AppLayout() {
   return (
     <div className="flex min-h-screen flex-col bg-background text-text-primary">
-      <a
-        href="#contenido"
-        className="focus-ring sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-30 focus:bg-surface focus:px-3 focus:py-2 focus:text-small"
-      >
+      <PersonJsonLd />
+      <a href="#contenido" className="skip-link focus-ring">
         Saltar al contenido
       </a>
       <Navbar />
       <main id="contenido" className="flex-1">
         <Container className="py-14 md:py-20">
-          <Outlet />
+          <Suspense fallback={<LoadingState label="Cargando" />}>
+            <Outlet />
+          </Suspense>
         </Container>
       </main>
       <Footer />

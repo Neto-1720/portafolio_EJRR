@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Section } from '../components/ui/Section.tsx'
 import { SectionHeader } from '../components/ui/SectionHeader.tsx'
 import { Button } from '../components/ui/Button.tsx'
@@ -8,6 +8,7 @@ import { adminField } from '../features/admin/form.ts'
 import { ApiError } from '../services/api.ts'
 import { sendContact } from '../services/contact.ts'
 import { FieldErrors } from '../services/admin/http.ts'
+import { usePageMeta } from '../seo/usePageMeta.ts'
 
 type FormState = {
   name: string
@@ -26,7 +27,9 @@ const emptyForm: FormState = {
 }
 
 const links = [
-  profile.email ? { href: `mailto:${profile.email}`, label: profile.email } : null,
+  profile.email
+    ? { href: `mailto:${profile.email}`, label: profile.email }
+    : null,
   profile.linkedin ? { href: profile.linkedin, label: 'LinkedIn' } : null,
   profile.github ? { href: profile.github, label: 'GitHub' } : null,
 ].filter((item) => item !== null)
@@ -38,9 +41,12 @@ export function ContactPage() {
   const [success, setSuccess] = useState('')
   const [pending, setPending] = useState(false)
 
-  useEffect(() => {
-    document.title = 'Contacto — Ernesto Rodríguez'
-  }, [])
+  usePageMeta({
+    title: 'Contact — Ernesto Rodríguez',
+    description:
+      'Escríbeme sobre una oportunidad o un proyecto. Full Stack Developer con foco en Laravel, React y TypeScript.',
+    path: '/contact',
+  })
 
   function update(key: keyof FormState, value: string) {
     setForm((current) => ({ ...current, [key]: value }))
@@ -138,7 +144,9 @@ export function ContactPage() {
             className={adminField}
             value={form.subject}
             aria-invalid={errors.subject ? true : undefined}
-            aria-describedby={errors.subject ? 'contact-subject-error' : undefined}
+            aria-describedby={
+              errors.subject ? 'contact-subject-error' : undefined
+            }
             onChange={(event) => update('subject', event.target.value)}
           />
         </Field>
@@ -154,11 +162,16 @@ export function ContactPage() {
             rows={6}
             value={form.message}
             aria-invalid={errors.message ? true : undefined}
-            aria-describedby={errors.message ? 'contact-message-error' : undefined}
+            aria-describedby={
+              errors.message ? 'contact-message-error' : undefined
+            }
             onChange={(event) => update('message', event.target.value)}
           />
         </Field>
-        <div className="absolute -left-[9999px] h-0 overflow-hidden" aria-hidden="true">
+        <div
+          className="absolute -left-[9999px] h-0 overflow-hidden"
+          aria-hidden="true"
+        >
           <label htmlFor="contact-website">Website</label>
           <input
             id="contact-website"

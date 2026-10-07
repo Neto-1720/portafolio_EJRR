@@ -62,6 +62,8 @@ export function CaseStudyHero({
         <img
           src={coverSrc}
           alt={cover?.alt_text ?? ''}
+          fetchPriority="high"
+          decoding="async"
           className="aspect-[16/10] w-full rounded-xl object-cover"
         />
       ) : (

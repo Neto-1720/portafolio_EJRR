@@ -3,6 +3,7 @@ import '@fontsource-variable/geist-mono/wght.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router'
+import { AppErrorBoundary } from './components/feedback/AppErrorBoundary.tsx'
 import { router } from './app/router.tsx'
 import './index.css'
 
@@ -14,6 +15,8 @@ if (!root) {
 
 createRoot(root).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AppErrorBoundary>
+      <RouterProvider router={router} />
+    </AppErrorBoundary>
   </StrictMode>,
 )

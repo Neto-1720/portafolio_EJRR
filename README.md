@@ -1,6 +1,12 @@
 # Portfolio — Ernesto Jahir Rodríguez Ramírez
 
-Base técnica de un portafolio full stack. El monorepo ya tiene el esquema de datos, la API pública de lectura y la home conectada a esa API. Todavía no hay case studies completos ni admin.
+Portafolio público de un Full Stack Developer. Presenta proyectos, case studies, mini demos técnicas y un formulario de contacto. Un administrador privado edita el contenido.
+
+Todavía no está desplegado. No hay dominio ni capturas del sitio en el repositorio.
+
+## Capturas
+
+Pendientes. Cuando existan, irán aquí. No se usan imágenes de trabajo real hasta tener autorización para publicarlas.
 
 ## Arquitectura
 
@@ -13,7 +19,11 @@ React (web/)
     ↓  REST
 Laravel (api/)
     ↓
-PostgreSQL en Supabase
+PostgreSQL
+    ↓
+Storage
+
+Queue (database) → Mail
 ```
 
 El detalle está en [docs/arquitectura.md](docs/arquitectura.md). El sistema visual está en [docs/design-system.md](docs/design-system.md).
@@ -36,9 +46,10 @@ web/src/
   app/          router
   components/   ui, layout, content, feedback
   config/       perfil y navegación
-  features/     home y comprobación de /api/health
-  pages/        home, work, about y contact
-  services/     cliente HTTP de la API pública
+  features/     home, work, demos y admin
+  pages/        públicas, case studies, demos y admin
+  services/     cliente HTTP de la API
+  seo/          título, meta y sitemap
   hooks/
   types/
   utils/
@@ -106,6 +117,7 @@ SQLite no sustituye a Supabase. Sirve para migrar y sembrar en local. El detalle
 | `VITE_LINKEDIN_URL` | Opcional. Si falta, el enlace no se muestra. |
 | `VITE_EMAIL` | Opcional. Si falta, el correo no se muestra. |
 | `VITE_CV_URL` | Opcional. Si falta, no hay botón de CV. |
+| `VITE_SITE_URL` | Origen público, sin barra final. Vacío hasta tener dominio. Activa canonical, `og:url` y el sitemap del build. |
 
 `api/.env.example`
 
@@ -124,7 +136,10 @@ SQLite no sustituye a Supabase. Sirve para migrar y sembrar en local. El detalle
 | `SUPABASE_URL` | URL del proyecto |
 | `SUPABASE_ANON_KEY` | Clave anónima. No la usa React. |
 | `SUPABASE_SERVICE_ROLE_KEY` | Clave de servicio, solo en el servidor |
-| `SUPABASE_STORAGE_BUCKET` | Bucket reservado para uploads futuros |
+| `SUPABASE_STORAGE_BUCKET` | Bucket preparado. Vacío de credenciales. |
+| `PORTFOLIO_MEDIA_DISK` | `public` en local. `supabase` cuando existan credenciales. |
+| `PORTFOLIO_CONTACT_EMAIL` | Destino del aviso de contacto. Vacío hasta configurarlo. |
+| `QUEUE_CONNECTION` | `database` para que el formulario no espere al correo. |
 
 No hay claves reales en Git.
 
@@ -144,7 +159,16 @@ cd api
 php artisan serve
 ```
 
-La home temporal llama a `GET /api/health`. Si la API responde, se muestra «Backend conectado». Si no, se muestra el error.
+El frontend en desarrollo usa el proxy de Vite hacia `http://127.0.0.1:8000`. El admin y el contacto necesitan ese proxy para la cookie de Sanctum.
+
+Para el correo local:
+
+```bash
+cd api
+php artisan queue:work
+```
+
+Sin `PORTFOLIO_CONTACT_EMAIL` el job falla y el mensaje sigue guardado. `MAIL_MAILER=log` escribe el aviso en `storage/logs`, que no se versiona.
 
 ## Modelo de datos
 
@@ -154,7 +178,7 @@ Laravel es el único cliente de la base. React no consulta estas tablas.
 | --- | --- |
 | `projects` | Pertenece a muchas `technologies`. Tiene muchas `project_images`. |
 | `technologies` | Pertenece a muchos `projects` por `project_technology`. |
-| `project_images` | Pertenece a un `project`. `path` reserva el archivo; Storage todavía no sube nada. |
+| `project_images` | Pertenece a un `project`. El admin sube jpeg, png o webp al disco configurado. |
 | `certifications` | Catálogo independiente. |
 | `contact_messages` | Mensajes del formulario público. El correo sale por un job. |
 | `demo_shipments` | Envíos ficticios. |
@@ -226,25 +250,55 @@ Ejemplo de certificación:
 
 Los GET públicos comparten el límite de Laravel: 60 solicitudes por minuto por IP. CORS sigue aceptando solo `FRONTEND_URL`.
 
+## Features
+
+- Home, Work, About y Contact.
+- Case studies publicados.
+- Cinco mini demos con datos ficticios: `/demo/logistics`, `/demo/notifications`, `/demo/tracking`, `/demo/support`, `/demo/legacy`.
+- Admin en `/admin` con Sanctum: proyectos, certificaciones, imágenes y mensajes.
+- Formulario de contacto, cola `database` y job de correo.
+- Tema claro y nocturno.
+
 ## Testing
+
+Backend:
 
 ```bash
 cd api
 php artisan test
+./vendor/bin/pint --test
 ```
 
-PHPUnit cubre `GET /api/health`, el esquema, el seeder, la API pública, el admin y el contacto. Las pruebas usan SQLite en memoria.
+PHPUnit cubre la API pública, el admin, la subida de imágenes, el contacto, el límite de solicitudes, el job de correo, los mensajes y las demos. Usa SQLite en memoria. No se añadieron pruebas duplicadas.
 
-En el frontend:
+Frontend:
 
 ```bash
 cd web
 npm run lint
-npx tsc -b --pretty false
+npm run test
 npm run build
 ```
 
-Pest, Vitest y Playwright no están instalados. Entran en una fase posterior.
+Vitest cubre botón, tarjeta de proyecto, badge, tema, validación del contacto y estados de carga, error y vacío.
+
+Playwright, con la API en `127.0.0.1:8000`:
+
+```bash
+cd web
+npx playwright install chromium
+npm run test:e2e
+```
+
+El flujo de admin lee `E2E_ADMIN_EMAIL` y `E2E_ADMIN_PASSWORD` del entorno. Si faltan, ese caso se omite. La contraseña no se guarda en el repositorio. El usuario se crea en local con `php artisan portfolio:create-admin`.
+
+## SEO
+
+Cada página pública define título y descripción en el cliente. `index.html` deja los de la home para el primer render. Canonical y `og:url` solo aparecen si `VITE_SITE_URL` está definido. No hay imagen Open Graph inventada: `og:image` se escribe cuando el case study tiene una URL real de imagen.
+
+`web/public/robots.txt` permite el sitio y bloquea `/admin`. No es un control de acceso. El sitemap se genera en `dist/sitemap.xml` durante `npm run build` cuando `VITE_SITE_URL` es `http` o `https`. Incluye `/`, `/work`, `/about`, `/contact` y los cinco case studies publicados. No incluye `/admin` ni `/demo`.
+
+Es una SPA. Un crawler que no ejecuta JavaScript ve el título y la descripción de la home. No hay SSR.
 
 ## Home y API
 
@@ -258,6 +312,10 @@ Cada imagen pública incluye `path` y `url`. `url` es usable por el navegador cu
 
 El administrador, la sesión y las imágenes se documentan en [docs/admin.md](docs/admin.md) y [docs/supabase-setup.md](docs/supabase-setup.md). El formulario de `/contact`, la cola y el correo se explican en [docs/contact.md](docs/contact.md).
 
-## Qué no está en esta base
+## Despliegue
 
-WhatsApp real, un proveedor de correo conectado y despliegue. En local el correo se escribe en el log. Supabase todavía no tiene credenciales: las imágenes locales usan el disco `public`.
+Pendiente. Falta dominio, `VITE_SITE_URL`, `VITE_API_URL` de producción, CORS, cola en el servidor, un proveedor de correo real y, si se usa, las credenciales de Supabase. No hay CI ni analytics.
+
+## Qué no está
+
+WhatsApp real, un proveedor de correo conectado, capturas y despliegue. En local el correo se escribe en el log. Supabase no tiene credenciales: las imágenes locales usan el disco `public`.

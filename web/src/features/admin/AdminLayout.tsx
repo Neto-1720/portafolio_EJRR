@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router'
+import { LoadingState } from '../../components/feedback/LoadingState.tsx'
 import { Button } from '../../components/ui/Button.tsx'
 import { ThemeSwitch } from '../../components/layout/ThemeSwitch.tsx'
 import { cn } from '../../utils/cn.ts'
@@ -25,8 +26,12 @@ export function AdminLayout() {
 
   return (
     <div className="min-h-screen bg-background text-text-primary">
+      <a href="#contenido" className="skip-link focus-ring">
+        Saltar al contenido
+      </a>
       <div className="flex min-h-screen">
         <aside
+          id="admin-nav"
           className={cn(
             'fixed inset-y-0 left-0 z-30 w-60 border-r border-border bg-surface p-5 md:static',
             open ? 'block' : 'hidden md:block',
@@ -71,9 +76,11 @@ export function AdminLayout() {
             <Button
               variant="secondary"
               className="md:hidden"
+              aria-expanded={open}
+              aria-controls="admin-nav"
               onClick={() => setOpen((current) => !current)}
             >
-              Menú
+              {open ? 'Cerrar menú' : 'Abrir menú'}
             </Button>
             <p className="hidden text-small text-text-secondary md:block">
               {user?.name}
@@ -85,8 +92,10 @@ export function AdminLayout() {
               </Button>
             </div>
           </header>
-          <main className="px-4 py-8 md:px-8">
-            <Outlet />
+          <main id="contenido" className="min-w-0 px-4 py-8 md:px-8">
+            <Suspense fallback={<LoadingState label="Cargando" />}>
+              <Outlet />
+            </Suspense>
           </main>
         </div>
       </div>

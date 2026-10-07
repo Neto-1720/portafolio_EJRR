@@ -1,5 +1,3 @@
-import type { HealthResponse } from '../types/health.ts'
-
 export class ApiError extends Error {
   readonly status: number | null
 
@@ -74,23 +72,4 @@ async function fetchJson(path: string, init: RequestInit): Promise<unknown> {
   } catch {
     throw new ApiError('La respuesta del backend no es JSON válido.')
   }
-}
-
-export async function getHealth(signal?: AbortSignal): Promise<HealthResponse> {
-  const body = await requestJson('/api/health', signal)
-
-  if (!isHealthResponse(body)) {
-    throw new ApiError('La respuesta del backend no tiene el formato esperado.')
-  }
-
-  return body
-}
-
-function isHealthResponse(body: unknown): body is HealthResponse {
-  return (
-    typeof body === 'object' &&
-    body !== null &&
-    'status' in body &&
-    typeof body.status === 'string'
-  )
 }

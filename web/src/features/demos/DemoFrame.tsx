@@ -1,5 +1,6 @@
-import { useEffect, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { LinkButton } from '../../components/ui/LinkButton.tsx'
+import { usePageMeta } from '../../seo/usePageMeta.ts'
 import type { DemoEntry } from './catalog.ts'
 
 export function DemoFrame({
@@ -9,13 +10,11 @@ export function DemoFrame({
   demo: DemoEntry
   children: ReactNode
 }) {
-  useEffect(() => {
-    const previous = document.title
-    document.title = `${demo.title} — Ernesto Rodríguez`
-    return () => {
-      document.title = previous
-    }
-  }, [demo.title])
+  usePageMeta({
+    title: `${demo.title} — Ernesto Rodríguez`,
+    description: demo.summary,
+    path: demo.path,
+  })
 
   return (
     <article>

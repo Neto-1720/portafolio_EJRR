@@ -3,10 +3,18 @@ import { TechnologyBadge } from '../components/content/TechnologyBadge.tsx'
 import { Section } from '../components/ui/Section.tsx'
 import { SectionHeader } from '../components/ui/SectionHeader.tsx'
 import { aboutCopy } from '../features/home/engineering.ts'
+import { usePageMeta } from '../seo/usePageMeta.ts'
 
 const focus = ['Laravel', 'React', 'TypeScript', 'REST APIs', 'PostgreSQL']
 
 export function AboutPage() {
+  usePageMeta({
+    title: 'About — Ernesto Rodríguez',
+    description:
+      'Experiencia de Ernesto Rodríguez como Full Stack Developer en productos web, Laravel, React y TypeScript.',
+    path: '/about',
+  })
+
   return (
     <Section>
       <SectionHeader
