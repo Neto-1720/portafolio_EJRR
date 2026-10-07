@@ -1,3 +1,12 @@
+import {
+  BadgeCheck,
+  ChartColumn,
+  Database,
+  LayoutTemplate,
+  Server,
+  Webhook,
+} from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { useCallback } from 'react'
 import { TechnologyBadge } from '../../components/content/TechnologyBadge.tsx'
 import { ErrorState } from '../../components/feedback/ErrorState.tsx'
@@ -30,25 +39,47 @@ export function EngineeringSection() {
         ) : null}
         {state.status !== 'loading' ? (
           <div className="grid gap-4 md:grid-cols-2">
-            {engineeringGroups.map((group) => (
-              <Card key={group.title}>
-                <h3 className="font-mono text-mono-label tracking-wide text-text-muted uppercase">
-                  {group.title}
-                </h3>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {group.items.map((item) => (
-                    <li key={item}>
-                      <TechnologyBadge name={labelFromCatalog(item, catalog)} />
-                    </li>
-                  ))}
-                </ul>
-              </Card>
-            ))}
+            {engineeringGroups.map((group) => {
+              const Icon = groupIcons[group.title]
+              return (
+                <Card key={group.title}>
+                  <div className="flex items-center gap-3">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-accent-soft text-accent">
+                      <Icon className="size-4" aria-hidden="true" />
+                    </span>
+                    <h3 className="font-mono text-mono-label tracking-wide text-text-muted uppercase">
+                      {group.title}
+                    </h3>
+                  </div>
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {group.items.map((item) => (
+                      <li key={item}>
+                        <TechnologyBadge
+                          name={labelFromCatalog(item, catalog)}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              )
+            })}
           </div>
         ) : null}
       </div>
     </Section>
   )
+}
+
+const groupIcons: Record<
+  (typeof engineeringGroups)[number]['title'],
+  LucideIcon
+> = {
+  Backend: Server,
+  Frontend: LayoutTemplate,
+  'APIs & Integrations': Webhook,
+  Data: Database,
+  Quality: BadgeCheck,
+  'Data & Business': ChartColumn,
 }
 
 function labelFromCatalog(

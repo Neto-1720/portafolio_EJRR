@@ -1,3 +1,4 @@
+import { ArrowRight, Mail, MessageCircle } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { Button } from '../../components/ui/Button.tsx'
 import { EmptyState } from '../../components/feedback/EmptyState.tsx'
@@ -60,6 +61,24 @@ export function NotificationsDemoPage() {
 
   return (
     <DemoFrame demo={demo}>
+      <ol
+        aria-label="Delivery flow"
+        className="mb-6 flex flex-wrap items-center gap-2"
+      >
+        {['Event', 'Service', 'Queue', 'Delivery'].map((step, index, list) => (
+          <li key={step} className="inline-flex items-center gap-2">
+            <span className="rounded-lg border border-border bg-surface px-3 py-2 font-mono text-caption text-text-secondary shadow-sm">
+              {step}
+            </span>
+            {index < list.length - 1 ? (
+              <ArrowRight
+                className="size-3.5 text-text-muted"
+                aria-hidden="true"
+              />
+            ) : null}
+          </li>
+        ))}
+      </ol>
       <form
         className="grid gap-4 sm:grid-cols-2"
         onSubmit={(event) => event.preventDefault()}
@@ -144,7 +163,20 @@ export function NotificationsDemoPage() {
                         {item.event}
                       </td>
                       <td className="px-4 py-3">
-                        {labelFor(notificationChannels, item.channel)}
+                        <span className="inline-flex items-center gap-2">
+                          {item.channel === 'whatsapp' ? (
+                            <MessageCircle
+                              className="size-3.5 text-accent"
+                              aria-hidden="true"
+                            />
+                          ) : (
+                            <Mail
+                              className="size-3.5 text-accent"
+                              aria-hidden="true"
+                            />
+                          )}
+                          {labelFor(notificationChannels, item.channel)}
+                        </span>
                       </td>
                       <td className="px-4 py-3 break-all">{item.recipient}</td>
                       <td className="px-4 py-3">

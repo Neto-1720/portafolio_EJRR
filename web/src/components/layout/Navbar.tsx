@@ -1,5 +1,8 @@
+import { Briefcase, Mail, UserRound, Wrench } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router'
+import { Monogram } from '../../assets/branding/Monogram.tsx'
 import { profile } from '../../config/profile.ts'
 import { navItems } from '../../config/site.ts'
 import { cn } from '../../utils/cn.ts'
@@ -39,9 +42,10 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between gap-4">
           <Link
             to="/"
-            className="focus-ring text-small font-medium tracking-wide text-text-primary"
+            aria-label="Inicio"
+            className="focus-ring inline-flex rounded-lg"
           >
-            {profile.mark}
+            <Monogram />
           </Link>
           <nav className="hidden md:block" aria-label="Principal">
             <NavList />
@@ -87,8 +91,9 @@ function NavList({ stacked = false }: { stacked?: boolean }) {
           {item.to.includes('#') ? (
             <Link
               to={item.to}
-              className="focus-ring rounded-md px-2.5 py-1.5 text-small text-text-secondary hover:bg-surface hover:text-text-primary"
+              className="focus-ring inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-small text-text-secondary hover:bg-surface hover:text-text-primary"
             >
+              <NavIcon name={item.label} />
               {item.label}
             </Link>
           ) : (
@@ -97,13 +102,14 @@ function NavList({ stacked = false }: { stacked?: boolean }) {
               end={item.end}
               className={({ isActive }) =>
                 cn(
-                  'focus-ring rounded-md px-2.5 py-1.5 text-small',
+                  'focus-ring inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-small',
                   isActive
                     ? 'bg-surface text-text-primary shadow-sm'
                     : 'text-text-secondary hover:bg-surface hover:text-text-primary',
                 )
               }
             >
+              <NavIcon name={item.label} />
               {item.label}
             </NavLink>
           )}
@@ -111,6 +117,23 @@ function NavList({ stacked = false }: { stacked?: boolean }) {
       ))}
     </ul>
   )
+}
+
+const navIcons: Record<string, LucideIcon> = {
+  Work: Briefcase,
+  About: UserRound,
+  Engineering: Wrench,
+  Contact: Mail,
+}
+
+function NavIcon({ name }: { name: string }) {
+  const Icon = navIcons[name]
+
+  if (!Icon) {
+    return null
+  }
+
+  return <Icon className="size-3.5" aria-hidden="true" />
 }
 
 function ProfileLinks() {

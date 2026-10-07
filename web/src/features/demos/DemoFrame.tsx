@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { ProjectCover } from '../../assets/covers/ProjectCover.tsx'
 import { LinkButton } from '../../components/ui/LinkButton.tsx'
 import { usePageMeta } from '../../seo/usePageMeta.ts'
 import type { DemoEntry } from './catalog.ts'
@@ -18,6 +19,9 @@ export function DemoFrame({
 
   return (
     <article>
+      <div className="mb-8 h-40 overflow-hidden rounded-xl border border-border shadow-sm">
+        <ProjectCover slug={demo.projectSlug} title={demo.title} />
+      </div>
       <p className="font-mono text-mono-label tracking-wide text-text-muted uppercase">
         Interactive demo
       </p>

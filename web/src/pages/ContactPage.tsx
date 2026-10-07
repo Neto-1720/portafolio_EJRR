@@ -1,3 +1,4 @@
+import { Mail } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { Section } from '../components/ui/Section.tsx'
 import { SectionHeader } from '../components/ui/SectionHeader.tsx'
@@ -95,8 +96,11 @@ export function ContactPage() {
         title="Contacto"
         description="¿Quieres hablar sobre una oportunidad o proyecto?"
       />
+      <span className="mt-8 grid size-10 place-items-center rounded-lg bg-accent-soft text-accent">
+        <Mail className="size-4" aria-hidden="true" />
+      </span>
       <form
-        className="mt-8 max-w-xl space-y-4"
+        className="mt-4 max-w-xl space-y-4"
         noValidate
         onSubmit={(event) => void onSubmit(event)}
       >

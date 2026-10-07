@@ -1,3 +1,5 @@
+import { CircleCheck, Package, TriangleAlert, Truck } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { EmptyState } from '../../components/feedback/EmptyState.tsx'
 import { ErrorState } from '../../components/feedback/ErrorState.tsx'
@@ -83,11 +85,31 @@ export function LogisticsDemoPage() {
       ) : null}
       {state.status === 'ok' ? (
         <div className="mt-8" aria-busy={refreshing}>
+          <div className="mb-4 flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3 shadow-sm">
+            <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-accent-soft text-accent">
+              <Truck className="size-4" aria-hidden="true" />
+            </span>
+            <p className="text-small text-text-secondary">
+              Operational view of the fictional shipments in this portfolio.
+            </p>
+          </div>
           <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Kpi label="Total shipments" value={state.data.total} />
-            <Kpi label="In transit" value={state.data.inTransit} />
-            <Kpi label="Delivered" value={state.data.delivered} />
-            <Kpi label="Exceptions" value={state.data.exceptions} />
+            <Kpi
+              label="Total shipments"
+              value={state.data.total}
+              icon={Package}
+            />
+            <Kpi label="In transit" value={state.data.inTransit} icon={Truck} />
+            <Kpi
+              label="Delivered"
+              value={state.data.delivered}
+              icon={CircleCheck}
+            />
+            <Kpi
+              label="Exceptions"
+              value={state.data.exceptions}
+              icon={TriangleAlert}
+            />
           </dl>
           <p className="mt-3 text-caption text-text-muted">
             Counts follow the current filters.
@@ -159,10 +181,19 @@ export function LogisticsDemoPage() {
   )
 }
 
-function Kpi({ label, value }: { label: string; value: number }) {
+function Kpi({
+  label,
+  value,
+  icon: Icon,
+}: {
+  label: string
+  value: number
+  icon: LucideIcon
+}) {
   return (
     <div className="rounded-xl border border-border bg-surface px-5 py-4 shadow-sm">
-      <dt className="font-mono text-mono-label tracking-wide text-text-muted uppercase">
+      <dt className="flex items-center gap-2 font-mono text-mono-label tracking-wide text-text-muted uppercase">
+        <Icon className="size-3.5 text-accent" aria-hidden="true" />
         {label}
       </dt>
       <dd className="mt-2 text-h2 tabular-nums text-text-primary">{value}</dd>

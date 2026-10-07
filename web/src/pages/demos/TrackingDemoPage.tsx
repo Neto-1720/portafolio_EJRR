@@ -1,3 +1,5 @@
+import { CircleCheck, FilePlus, MapPin, Package, Truck } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { useState, type CSSProperties, type KeyboardEvent } from 'react'
 import { demos } from '../../features/demos/catalog.ts'
 import { DemoFrame } from '../../features/demos/DemoFrame.tsx'
@@ -32,16 +34,21 @@ const brands = [
   },
 ] as const
 
-const steps = [
-  { id: 'created', label: 'Created' },
-  { id: 'picked_up', label: 'Picked up' },
-  { id: 'in_transit', label: 'In transit' },
-  { id: 'out_for_delivery', label: 'Out for delivery' },
-  { id: 'delivered', label: 'Delivered' },
-] as const
+const steps: {
+  id: string
+  label: string
+  icon: LucideIcon
+}[] = [
+  { id: 'created', label: 'Created', icon: FilePlus },
+  { id: 'picked_up', label: 'Picked up', icon: Package },
+  { id: 'in_transit', label: 'In transit', icon: Truck },
+  { id: 'out_for_delivery', label: 'Out for delivery', icon: MapPin },
+  { id: 'delivered', label: 'Delivered', icon: CircleCheck },
+]
 
 type BrandId = (typeof brands)[number]['id']
-type StepId = (typeof steps)[number]['id']
+type StepId =
+  'created' | 'picked_up' | 'in_transit' | 'out_for_delivery' | 'delivered'
 
 export function TrackingDemoPage() {
   const [brandId, setBrandId] = useState<BrandId>('acme')
@@ -165,7 +172,15 @@ export function TrackingDemoPage() {
                   className="border-b border-border px-4 py-4 last:border-b-0 sm:border-r sm:border-b-0 sm:last:border-r-0"
                   aria-current={index === currentIndex ? 'step' : undefined}
                 >
-                  <p className="font-mono text-caption text-text-muted uppercase">
+                  <step.icon
+                    className={
+                      index === currentIndex
+                        ? 'size-4 text-accent'
+                        : 'size-4 text-text-muted'
+                    }
+                    aria-hidden="true"
+                  />
+                  <p className="mt-2 font-mono text-caption text-text-muted uppercase">
                     {state}
                   </p>
                   <p className="mt-1 text-small text-text-primary">

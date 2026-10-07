@@ -1,11 +1,10 @@
-import { profile } from '../../config/profile.ts'
+import { ProductPanels } from '../../assets/illustrations/ProductPanels.tsx'
 import { LinkButton } from '../../components/ui/LinkButton.tsx'
-
-const marks = ['Laravel', 'React', 'TypeScript', 'REST API', 'PostgreSQL']
+import { profile } from '../../config/profile.ts'
 
 export function HomeHero() {
   return (
-    <section className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.85fr)] lg:gap-16">
+    <section className="grid items-center gap-10 md:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.85fr)] md:gap-12 lg:gap-16">
       <div>
         <p className="font-mono text-mono-label tracking-wide text-text-muted uppercase">
           Portfolio
@@ -58,20 +57,7 @@ export function HomeHero() {
           ) : null}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-3" aria-hidden="true">
-        {marks.map((mark, index) => (
-          <div
-            key={mark}
-            className={
-              index === 2
-                ? 'col-span-2 rounded-xl border border-border bg-surface px-5 py-6 shadow-sm'
-                : 'rounded-xl border border-border bg-surface-secondary px-4 py-5'
-            }
-          >
-            <p className="font-mono text-caption text-text-secondary">{mark}</p>
-          </div>
-        ))}
-      </div>
+      <ProductPanels />
     </section>
   )
 }

@@ -1,8 +1,9 @@
+import { ProjectCover } from '../../assets/covers/ProjectCover.tsx'
 import { TechnologyBadge } from '../../components/content/TechnologyBadge.tsx'
 import { LinkButton } from '../../components/ui/LinkButton.tsx'
+import { demoForProject } from '../demos/catalog.ts'
 import type { ProjectImage, Technology } from '../../types/portfolio.ts'
 import { imageUrl } from '../../utils/publicUrl.ts'
-import { ImagePlaceholder } from './ImagePlaceholder.tsx'
 
 type CaseStudyHeroProps = {
   title: string
@@ -12,6 +13,7 @@ type CaseStudyHeroProps = {
   period: string | null
   technologies: Technology[]
   cover: ProjectImage | null
+  slug: string
 }
 
 export function CaseStudyHero({
@@ -22,8 +24,10 @@ export function CaseStudyHero({
   period,
   technologies,
   cover,
+  slug,
 }: CaseStudyHeroProps) {
   const coverSrc = imageUrl(cover)
+  const demo = demoForProject(slug)
 
   return (
     <header className="grid items-end gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(16rem,0.9fr)]">
@@ -52,23 +56,32 @@ export function CaseStudyHero({
             ))}
           </ul>
         ) : null}
-        <div className="mt-8">
+        <div className="mt-8 flex flex-wrap gap-3">
+          {demo ? (
+            <LinkButton to={demo.path} variant="primary">
+              Open Demo
+            </LinkButton>
+          ) : null}
           <LinkButton to="/work" variant="secondary">
             Back to Work
           </LinkButton>
         </div>
       </div>
-      {coverSrc ? (
-        <img
-          src={coverSrc}
-          alt={cover?.alt_text ?? ''}
-          fetchPriority="high"
-          decoding="async"
-          className="aspect-[16/10] w-full rounded-xl object-cover"
-        />
-      ) : (
-        <ImagePlaceholder label={cover?.alt_text ?? title} large />
-      )}
+      <div className="overflow-hidden rounded-xl border border-border shadow-md">
+        {coverSrc ? (
+          <img
+            src={coverSrc}
+            alt={cover?.alt_text ?? ''}
+            fetchPriority="high"
+            decoding="async"
+            className="aspect-[16/10] w-full object-cover"
+          />
+        ) : (
+          <div className="aspect-[16/10]">
+            <ProjectCover slug={slug} title={title} />
+          </div>
+        )}
+      </div>
     </header>
   )
 }

@@ -10,6 +10,14 @@ const tones: Record<StatusTone, string> = {
   danger: 'bg-danger/15 text-text-primary',
 }
 
+const dots: Record<StatusTone, string> = {
+  neutral: 'bg-text-muted',
+  info: 'bg-accent',
+  success: 'bg-success',
+  warning: 'bg-warning',
+  danger: 'bg-danger',
+}
+
 export function StatusBadge({
   children,
   tone,
@@ -20,10 +28,14 @@ export function StatusBadge({
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-caption',
+        'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-caption',
         tones[tone],
       )}
     >
+      <span
+        className={cn('size-1.5 rounded-full', dots[tone])}
+        aria-hidden="true"
+      />
       {children}
     </span>
   )

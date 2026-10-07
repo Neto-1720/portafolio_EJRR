@@ -26,7 +26,8 @@ describe('ProjectCard', () => {
     ).toHaveAttribute('href', '/work/saas-logistics-platform')
     expect(screen.getByText('Un panel de envíos.')).toBeInTheDocument()
     expect(screen.getByText('Laravel')).toBeInTheDocument()
-    expect(screen.getByText('Sin imagen')).toBeInTheDocument()
+    expect(screen.getByTestId('project-cover')).toBeInTheDocument()
+    expect(screen.queryByText('Sin imagen')).not.toBeInTheDocument()
   })
 
   it('renders a cover with lazy loading', () => {

@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { Monogram } from '../../assets/branding/Monogram.tsx'
 import { Navigate, useNavigate } from 'react-router'
 import { Button } from '../../components/ui/Button.tsx'
 import { ThemeSwitch } from '../../components/layout/ThemeSwitch.tsx'
@@ -63,6 +64,9 @@ export function LoginPage() {
           className="mx-auto mt-8 max-w-sm rounded-lg border border-border bg-surface p-6 shadow-sm"
           onSubmit={(event) => void onSubmit(event)}
         >
+          <div className="mb-5 text-text-primary">
+            <Monogram size={40} />
+          </div>
           <h1 className="text-h3">Iniciar sesión</h1>
           <p className="mt-2 text-small text-text-secondary">
             Acceso del administrador del portafolio.

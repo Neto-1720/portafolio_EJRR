@@ -1,3 +1,11 @@
+import {
+  ArrowRightLeft,
+  Columns2,
+  Loader,
+  PanelsTopLeft,
+  Smartphone,
+} from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Skeleton } from '../../components/feedback/Skeleton.tsx'
 import { cn } from '../../utils/cn.ts'
@@ -36,22 +44,30 @@ const states = [
   { value: 'Queued', label: 'Queued' },
 ]
 
-const differences = [
+const differences: {
+  title: string
+  text: string
+  icon: LucideIcon
+}[] = [
   {
     title: 'Componentization',
     text: 'The modern view is a set of small pieces. The legacy view is one table with its controls beside it.',
+    icon: PanelsTopLeft,
   },
   {
     title: 'SPA navigation',
     text: 'Switching presentation stays on this page. A classic server screen would reload the document.',
+    icon: ArrowRightLeft,
   },
   {
     title: 'Loading states',
     text: 'The modern view shows a skeleton while it prepares. The legacy view appears at once.',
+    icon: Loader,
   },
   {
     title: 'Responsive UI',
     text: 'The modern cards stack on a narrow screen. The legacy table keeps a horizontal scroll.',
+    icon: Smartphone,
   },
 ]
 
@@ -136,6 +152,12 @@ export function LegacyDemoPage() {
           />
         </FilterField>
       </form>
+      <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 font-mono text-caption text-text-secondary">
+        <Columns2 className="size-3.5 text-accent" aria-hidden="true" />
+        {mode === 'legacy'
+          ? 'Before · classic table'
+          : 'After · component view'}
+      </p>
       <div className="mt-6">
         {mode === 'legacy' ? <LegacyTable rows={visible} /> : null}
         {mode === 'modern' && preparing ? (
@@ -165,7 +187,10 @@ export function LegacyDemoPage() {
               key={item.title}
               className="rounded-xl border border-border bg-surface px-5 py-4 shadow-sm"
             >
-              <dt className="text-small text-text-primary">{item.title}</dt>
+              <dt className="flex items-center gap-2 text-small text-text-primary">
+                <item.icon className="size-4 text-accent" aria-hidden="true" />
+                {item.title}
+              </dt>
               <dd className="mt-2 text-small text-text-secondary">
                 {item.text}
               </dd>

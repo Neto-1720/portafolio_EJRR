@@ -1,3 +1,5 @@
+import { Briefcase } from 'lucide-react'
+
 type ExperienceItemProps = {
   period?: string | null
   title: string
@@ -20,7 +22,13 @@ export function ExperienceItem({
       {period ? (
         <p className="font-mono text-caption text-text-muted">{period}</p>
       ) : null}
-      <h3 className="mt-1 text-h3 break-words text-text-primary">{title}</h3>
+      <h3 className="mt-1 flex items-start gap-2 text-h3 break-words text-text-primary">
+        <Briefcase
+          className="mt-1 size-4 shrink-0 text-accent"
+          aria-hidden="true"
+        />
+        {title}
+      </h3>
       <p className="mt-1 text-small text-text-secondary">{company}</p>
       {summary ? (
         <p className="mt-2 text-small break-words text-text-secondary">

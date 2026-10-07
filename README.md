@@ -26,7 +26,7 @@ Storage
 Queue (database) → Mail
 ```
 
-El detalle está en [docs/arquitectura.md](docs/arquitectura.md). El sistema visual está en [docs/design-system.md](docs/design-system.md).
+El detalle está en [docs/arquitectura.md](docs/arquitectura.md). El sistema visual está en [docs/design-system.md](docs/design-system.md). El monograma y las covers están en [docs/visual-system.md](docs/visual-system.md).
 
 ## Estructura
 

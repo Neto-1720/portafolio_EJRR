@@ -24,6 +24,15 @@ import {
 
 const demo = demos[3]
 
+function initials(name: string) {
+  return name
+    .split(' ')
+    .slice(0, 2)
+    .map((part) => part[0] ?? '')
+    .join('')
+    .toUpperCase()
+}
+
 export function SupportDemoPage() {
   const [search, setSearch] = useState('')
   const [panel, setPanel] = useState<'list' | 'thread'>('list')
@@ -142,11 +151,28 @@ export function SupportDemoPage() {
                           setActionError(null)
                         }}
                       >
-                        <span className="block text-small text-text-primary">
-                          {item.customer_name}
-                        </span>
-                        <span className="mt-1 block truncate text-caption text-text-muted">
-                          {item.preview ?? 'No messages'}
+                        <span className="flex items-start gap-3">
+                          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-surface-secondary font-mono text-caption text-text-primary">
+                            {initials(item.customer_name)}
+                          </span>
+                          <span className="min-w-0">
+                            <span className="flex flex-wrap items-center gap-2">
+                              <span className="text-small text-text-primary">
+                                {item.customer_name}
+                              </span>
+                              <StatusBadge
+                                tone={toneFor(
+                                  conversationStatuses,
+                                  item.status,
+                                )}
+                              >
+                                {labelFor(conversationStatuses, item.status)}
+                              </StatusBadge>
+                            </span>
+                            <span className="mt-1 block truncate text-caption text-text-muted">
+                              {item.preview ?? 'No messages'}
+                            </span>
+                          </span>
                         </span>
                       </button>
                     </li>

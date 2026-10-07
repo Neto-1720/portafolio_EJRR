@@ -1,3 +1,4 @@
+import { Monogram } from '../assets/branding/Monogram.tsx'
 import { profile } from '../config/profile.ts'
 import { TechnologyBadge } from '../components/content/TechnologyBadge.tsx'
 import { Section } from '../components/ui/Section.tsx'
@@ -23,12 +24,15 @@ export function AboutPage() {
         title="Acerca de"
         description={aboutCopy[0]}
       />
-      <div className="mt-6 max-w-2xl space-y-4">
-        <p className="text-body text-text-secondary">{aboutCopy[1]}</p>
-        <p className="text-body text-text-secondary">
-          Prefiero sistemas claros: responsabilidades separadas, interfaces
-          predecibles y cambios que se puedan revisar.
-        </p>
+      <div className="mt-6 flex max-w-2xl items-start gap-4">
+        <Monogram size={44} />
+        <div className="space-y-4">
+          <p className="text-body text-text-secondary">{aboutCopy[1]}</p>
+          <p className="text-body text-text-secondary">
+            Prefiero sistemas claros: responsabilidades separadas, interfaces
+            predecibles y cambios que se puedan revisar.
+          </p>
+        </div>
       </div>
       <ul className="mt-8 flex flex-wrap gap-2">
         {focus.map((item) => (

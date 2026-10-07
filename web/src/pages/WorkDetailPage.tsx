@@ -90,6 +90,7 @@ function CaseStudy({ project }: { project: ProjectDetail }) {
         role={project.role}
         period={project.period}
         technologies={project.technologies}
+        slug={project.slug}
         cover={
           project.images.find((image) => image.is_cover) ??
           project.images[0] ??

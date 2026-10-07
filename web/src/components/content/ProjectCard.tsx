@@ -1,5 +1,7 @@
+import { ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router'
+import { ProjectCover } from '../../assets/covers/ProjectCover.tsx'
 import { TechnologyBadge } from './TechnologyBadge.tsx'
 
 type ProjectCardImage = {
@@ -34,7 +36,7 @@ export function ProjectCard({
         aria-label={title}
         className="focus-ring block rounded-lg"
       >
-        <div className="flex aspect-[16/10] items-end overflow-hidden rounded-lg bg-surface-secondary">
+        <div className="aspect-[16/10] overflow-hidden rounded-lg border border-border bg-surface-secondary">
           {image ? (
             <img
               src={image.src}
@@ -45,9 +47,7 @@ export function ProjectCard({
               onError={() => setImageFailed(true)}
             />
           ) : (
-            <p className="p-4 font-mono text-caption text-text-muted">
-              Sin imagen
-            </p>
+            <ProjectCover slug={slugFromHref(href)} title={title} />
           )}
         </div>
         <div className="space-y-4 px-2 pt-4 pb-2">
@@ -64,9 +64,17 @@ export function ProjectCard({
               ))}
             </ul>
           ) : null}
-          <p className="text-small text-text-secondary">{cta}</p>
+          <p className="inline-flex items-center gap-1.5 text-small text-text-primary">
+            {cta}
+            <ArrowRight className="size-3.5 text-accent" aria-hidden="true" />
+          </p>
         </div>
       </Link>
     </article>
   )
+}
+
+function slugFromHref(href: string): string | null {
+  const match = href.match(/\/work\/([^/?#]+)/)
+  return match?.[1] ?? null
 }

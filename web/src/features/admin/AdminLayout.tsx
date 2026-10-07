@@ -1,16 +1,29 @@
+import { Award, FolderKanban, Inbox, LayoutDashboard } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { Suspense, useState } from 'react'
-import { NavLink, Outlet, useLocation } from 'react-router'
+import { Link, NavLink, Outlet, useLocation } from 'react-router'
+import { Monogram } from '../../assets/branding/Monogram.tsx'
 import { LoadingState } from '../../components/feedback/LoadingState.tsx'
 import { Button } from '../../components/ui/Button.tsx'
 import { ThemeSwitch } from '../../components/layout/ThemeSwitch.tsx'
 import { cn } from '../../utils/cn.ts'
 import { useAuth } from './useAuth.ts'
 
-const links = [
-  { to: '/admin', label: 'Dashboard', end: true },
-  { to: '/admin/projects', label: 'Proyectos', end: false },
-  { to: '/admin/certifications', label: 'Certificaciones', end: false },
-  { to: '/admin/messages', label: 'Mensajes', end: false },
+const links: {
+  to: string
+  label: string
+  end: boolean
+  icon: LucideIcon
+}[] = [
+  { to: '/admin', label: 'Dashboard', end: true, icon: LayoutDashboard },
+  { to: '/admin/projects', label: 'Proyectos', end: false, icon: FolderKanban },
+  {
+    to: '/admin/certifications',
+    label: 'Certificaciones',
+    end: false,
+    icon: Award,
+  },
+  { to: '/admin/messages', label: 'Mensajes', end: false, icon: Inbox },
 ]
 
 export function AdminLayout() {
@@ -37,7 +50,14 @@ export function AdminLayout() {
             open ? 'block' : 'hidden md:block',
           )}
         >
-          <p className="font-mono text-mono-label tracking-wide text-text-muted uppercase">
+          <Link
+            to="/"
+            aria-label="Inicio"
+            className="focus-ring inline-flex rounded-lg"
+          >
+            <Monogram size={28} />
+          </Link>
+          <p className="mt-4 font-mono text-mono-label tracking-wide text-text-muted uppercase">
             Admin
           </p>
           <nav className="mt-6" aria-label="Administración">
@@ -49,13 +69,14 @@ export function AdminLayout() {
                     end={link.end}
                     className={({ isActive }) =>
                       cn(
-                        'focus-ring block rounded-md px-3 py-2 text-small',
+                        'focus-ring flex items-center gap-2 rounded-md px-3 py-2 text-small',
                         isActive
                           ? 'bg-accent-soft text-text-primary'
                           : 'text-text-secondary hover:bg-surface-secondary',
                       )
                     }
                   >
+                    <link.icon className="size-4" aria-hidden="true" />
                     {link.label}
                   </NavLink>
                 </li>
