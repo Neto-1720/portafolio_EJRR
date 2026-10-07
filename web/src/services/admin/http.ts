@@ -41,7 +41,7 @@ export async function adminRequest(
 
   const headers: Record<string, string> = {
     Accept: 'application/json',
-    ...xsrfHeader(),
+    ...csrfHeaders(),
   }
   let body: BodyInit | undefined
 
@@ -81,7 +81,7 @@ export async function adminRequest(
   return payload
 }
 
-function xsrfHeader(): Record<string, string> {
+export function csrfHeaders(): Record<string, string> {
   const cookie = document.cookie
     .split('; ')
     .find((item) => item.startsWith('XSRF-TOKEN='))

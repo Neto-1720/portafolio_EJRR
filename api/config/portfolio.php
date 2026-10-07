@@ -9,4 +9,10 @@ return [
     */
     'media_disk' => env('PORTFOLIO_MEDIA_DISK', 'public'),
 
+    /*
+    | Correo que recibe los avisos del formulario público.
+    | Vacío hasta que se defina. El job no inventa un destinatario.
+    */
+    'contact_email' => env('PORTFOLIO_CONTACT_EMAIL'),
+
 ];

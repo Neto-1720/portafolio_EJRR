@@ -156,7 +156,7 @@ Laravel es el único cliente de la base. React no consulta estas tablas.
 | `technologies` | Pertenece a muchos `projects` por `project_technology`. |
 | `project_images` | Pertenece a un `project`. `path` reserva el archivo; Storage todavía no sube nada. |
 | `certifications` | Catálogo independiente. |
-| `contact_messages` | Bandeja futura. Sin formulario ni correo. |
+| `contact_messages` | Mensajes del formulario público. El correo sale por un job. |
 | `demo_shipments` | Envíos ficticios. |
 | `demo_notifications` | Avisos ficticios. Sin envío real. |
 | `demo_conversations` | Tiene muchos `demo_messages`. |
@@ -233,7 +233,7 @@ cd api
 php artisan test
 ```
 
-PHPUnit cubre `GET /api/health`, el esquema, el seeder y la API pública. Las pruebas usan SQLite en memoria.
+PHPUnit cubre `GET /api/health`, el esquema, el seeder, la API pública, el admin y el contacto. Las pruebas usan SQLite en memoria.
 
 En el frontend:
 
@@ -256,8 +256,8 @@ El perfil público vive en `web/src/config/profile.ts`. Nombre y rol están en c
 
 Cada imagen pública incluye `path` y `url`. `url` es usable por el navegador cuando el archivo existe en el disco configurado. Si no hay archivo, `url` es `null` y la galería sigue mostrando el placeholder. El frontend no arma URLs de Storage.
 
-El administrador, la sesión y las imágenes se documentan en [docs/admin.md](docs/admin.md) y [docs/supabase-setup.md](docs/supabase-setup.md).
+El administrador, la sesión y las imágenes se documentan en [docs/admin.md](docs/admin.md) y [docs/supabase-setup.md](docs/supabase-setup.md). El formulario de `/contact`, la cola y el correo se explican en [docs/contact.md](docs/contact.md).
 
 ## Qué no está en esta base
 
-El formulario de contacto, colas, correo real, WhatsApp real y despliegue. Supabase todavía no tiene credenciales: las imágenes locales usan el disco `public`.
+WhatsApp real, un proveedor de correo conectado y despliegue. En local el correo se escribe en el log. Supabase todavía no tiene credenciales: las imágenes locales usan el disco `public`.

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin ContactMessage */
-class AdminMessageResource extends JsonResource
+class AdminMessageListResource extends JsonResource
 {
     /**
      * @return array<string, mixed>
@@ -19,7 +19,6 @@ class AdminMessageResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'subject' => $this->subject,
-            'message' => $this->message,
             'status' => $this->status,
             'created_at' => $this->created_at?->toIso8601String(),
         ];

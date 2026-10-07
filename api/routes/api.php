@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\ProjectImageController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\CertificationController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Demo\ConversationController as DemoConversationController;
 use App\Http\Controllers\Demo\NotificationController as DemoNotificationController;
 use App\Http\Controllers\Demo\ShipmentController as DemoShipmentController;
@@ -20,6 +21,7 @@ Route::get('/projects', [ProjectController::class, 'index']);
 Route::get('/projects/{project:slug}', [ProjectController::class, 'show']);
 Route::get('/technologies', [TechnologyController::class, 'index']);
 Route::get('/certifications', [CertificationController::class, 'index']);
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1');
 
 Route::post('/login', [SessionController::class, 'store'])->middleware('throttle:5,1');
 Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth:sanctum');
@@ -28,6 +30,8 @@ Route::get('/user', [SessionController::class, 'user'])->middleware('auth:sanctu
 Route::middleware('auth:sanctum')->prefix('admin')->group(function (): void {
     Route::get('/dashboard', DashboardController::class);
     Route::get('/messages', [MessageController::class, 'index']);
+    Route::get('/messages/{message}', [MessageController::class, 'show']);
+    Route::patch('/messages/{message}', [MessageController::class, 'update']);
     Route::get('/projects', [AdminProjectController::class, 'index']);
     Route::post('/projects', [AdminProjectController::class, 'store']);
     Route::get('/projects/{project}', [AdminProjectController::class, 'show']);

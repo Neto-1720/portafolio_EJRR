@@ -57,13 +57,19 @@ export type AdminCertification = {
   is_published: boolean
 }
 
-export type AdminMessage = {
+export type MessageStatus = 'new' | 'read' | 'archived'
+
+export type AdminMessageSummary = {
   id: number
   name: string
   email: string
   subject: string | null
-  message: string
+  status: MessageStatus
   created_at: string | null
+}
+
+export type AdminMessageDetail = AdminMessageSummary & {
+  message: string
 }
 
 export type DashboardCounts = {
