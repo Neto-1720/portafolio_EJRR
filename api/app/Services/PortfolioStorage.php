@@ -43,12 +43,19 @@ class PortfolioStorage
             return null;
         }
 
-        $disk = Storage::disk($this->diskName());
+        if (str_starts_with($path, 'https://') || str_starts_with($path, 'http://')) {
+            return $path;
+        }
 
-        if (! $disk->exists($path)) {
+        // "/projects/..." apunta a web/public; el frontend usa el path tal cual.
+        if (str_starts_with($path, '/')) {
             return null;
         }
 
-        return $disk->url($path);
+        try {
+            return Storage::disk($this->diskName())->url($path);
+        } catch (RuntimeException) {
+            return null;
+        }
     }
 }

@@ -10,6 +10,12 @@ return [
     'media_disk' => env('PORTFOLIO_MEDIA_DISK', 'public'),
 
     /*
+    | Carpeta pública del frontend. Las imágenes sembradas con path
+    | "/projects/..." viven aquí hasta migrarlas al disco de medios.
+    */
+    'local_media_root' => env('PORTFOLIO_LOCAL_MEDIA_ROOT', base_path('../web/public')),
+
+    /*
     | Correo que recibe los avisos del formulario público.
     | Vacío hasta que se defina. El job no inventa un destinatario.
     */

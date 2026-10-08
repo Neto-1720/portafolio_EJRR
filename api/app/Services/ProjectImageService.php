@@ -16,7 +16,7 @@ class ProjectImageService
      */
     public function store(Project $project, UploadedFile $file, array $attributes): ProjectImage
     {
-        $path = $this->storage->store($file, 'projects/'.$project->id);
+        $path = $this->storage->store($file, 'projects/'.$project->slug);
 
         try {
             return DB::transaction(function () use ($project, $path, $attributes) {
