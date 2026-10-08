@@ -1,34 +1,25 @@
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { ContactPage } from './ContactPage.tsx'
 
 describe('ContactPage', () => {
-  it('shows validation errors and does not submit an empty form', async () => {
-    const user = userEvent.setup()
-    render(<ContactPage />)
+  it('shows the unavailable notice instead of the form', () => {
+    render(
+      <MemoryRouter>
+        <ContactPage />
+      </MemoryRouter>,
+    )
 
-    await user.click(screen.getByRole('button', { name: 'Enviar mensaje' }))
-
-    expect(screen.getByText('El nombre es obligatorio.')).toBeInTheDocument()
-    expect(screen.getByText('El correo es obligatorio.')).toBeInTheDocument()
-    expect(screen.getByText('El mensaje es obligatorio.')).toBeInTheDocument()
     expect(
-      screen.queryByText(
-        'Mensaje enviado correctamente. Gracias por contactarme.',
+      screen.getByText(
+        'Contacto temporalmente no disponible. Puedes contactarme por LinkedIn.',
       ),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('form')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Mensaje')).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Enviar mensaje' }),
     ).not.toBeInTheDocument()
-  })
-
-  it('rejects an invalid email', async () => {
-    const user = userEvent.setup()
-    render(<ContactPage />)
-
-    await user.type(screen.getByLabelText('Nombre'), 'Ana')
-    await user.type(screen.getByLabelText('Correo'), 'ana')
-    await user.type(screen.getByLabelText('Mensaje'), 'Hola, quiero conversar.')
-    await user.click(screen.getByRole('button', { name: 'Enviar mensaje' }))
-
-    expect(screen.getByText('El correo no es válido.')).toBeInTheDocument()
   })
 })

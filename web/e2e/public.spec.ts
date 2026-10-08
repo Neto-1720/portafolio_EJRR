@@ -27,15 +27,23 @@ test('recorre home, work, un case study y una demo', async ({ page }) => {
   await expect(page).toHaveURL(/\/work\/customer-support-desk$/)
 })
 
-test('envía el formulario de contacto', async ({ page }) => {
+test('contacto muestra el aviso y no envía mensajes', async ({ page }) => {
+  const contactPosts: string[] = []
+  page.on('request', (request) => {
+    if (request.method() === 'POST' && request.url().includes('/api/contact')) {
+      contactPosts.push(request.url())
+    }
+  })
+
   await page.goto('/contact')
-  await page.getByLabel('Nombre').fill('Ana Pérez')
-  await page.getByLabel('Correo').fill('ana@example.test')
-  await page
-    .getByLabel('Mensaje')
-    .fill('Mensaje de prueba del flujo de contacto del portafolio.')
-  await page.getByRole('button', { name: 'Enviar mensaje' }).click()
   await expect(
-    page.getByText('Mensaje enviado correctamente. Gracias por contactarme.'),
+    page.getByText(
+      'Contacto temporalmente no disponible. Puedes contactarme por LinkedIn.',
+    ),
   ).toBeVisible()
+  await expect(page.getByLabel('Mensaje')).toHaveCount(0)
+  await expect(
+    page.getByRole('button', { name: 'Enviar mensaje' }),
+  ).toHaveCount(0)
+  expect(contactPosts).toEqual([])
 })
