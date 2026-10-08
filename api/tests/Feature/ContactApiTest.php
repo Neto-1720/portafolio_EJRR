@@ -3,11 +3,11 @@
 namespace Tests\Feature;
 
 use App\Jobs\SendContactNotification;
-use App\Mail\ContactNotificationMail;
 use App\Models\ContactMessage;
 use App\Models\User;
+use App\Services\ContactMailer;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use RuntimeException;
 use Tests\TestCase;
@@ -91,27 +91,32 @@ class ContactApiTest extends TestCase
 
     public function test_notification_job_sends_mail(): void
     {
-        Mail::fake();
         $contact = $this->storedMessage();
-
-        (new SendContactNotification($contact))->handle();
-
-        Mail::assertSent(ContactNotificationMail::class, function (ContactNotificationMail $mail) use ($contact): bool {
-            return $mail->hasTo('owner@example.test')
-                && $mail->contact->is($contact);
+        $this->mock(ContactMailer::class, function ($mock) use ($contact): void {
+            $mock->shouldReceive('send')->once()->with($contact);
         });
+
+        $this->app->call([new SendContactNotification($contact), 'handle']);
     }
 
     public function test_mail_failure_keeps_the_stored_message(): void
     {
         $contact = $this->storedMessage();
-        config(['portfolio.contact_email' => null]);
+        $failure = new RuntimeException('SMTP no disponible.');
+        $this->mock(ContactMailer::class, function ($mock) use ($contact, $failure): void {
+            $mock->shouldReceive('send')->times(3)->with($contact)->andThrow($failure);
+        });
+        $job = new SendContactNotification($contact);
+        $this->assertInstanceOf(ShouldQueue::class, $job);
+        $this->assertSame(3, $job->tries);
 
-        try {
-            (new SendContactNotification($contact))->handle();
-            $this->fail('El job debía fallar sin destinatario.');
-        } catch (RuntimeException $exception) {
-            $this->assertSame('Falta PORTFOLIO_CONTACT_EMAIL.', $exception->getMessage());
+        for ($attempt = 0; $attempt < $job->tries; $attempt++) {
+            try {
+                $this->app->call([$job, 'handle']);
+                $this->fail('El job debía propagar el fallo SMTP.');
+            } catch (RuntimeException $exception) {
+                $this->assertSame($failure, $exception);
+            }
         }
 
         $this->assertModelExists($contact);
