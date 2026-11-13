@@ -23,7 +23,7 @@ export function DemoFrame({
         <ProjectCover slug={demo.projectSlug} title={demo.title} />
       </div>
       <p className="font-mono text-mono-label tracking-wide text-text-muted uppercase">
-        Interactive demo
+        Demo interactiva
       </p>
       <h1 className="mt-3 text-h1 tracking-tight text-balance text-text-primary">
         {demo.title}
@@ -32,11 +32,12 @@ export function DemoFrame({
         {demo.summary}
       </p>
       <p className="mt-3 max-w-2xl text-small text-text-muted">
-        Fictional data. No real customers, carriers, messages, or deliveries.
+        Datos ficticios. No hay clientes, paqueterías, mensajes ni entregas
+        reales. Es una porción segura del case study para que veas el flujo.
       </p>
       <div className="mt-6">
         <LinkButton to={`/work/${demo.projectSlug}`} variant="secondary">
-          Back to case study
+          Volver al case study
         </LinkButton>
       </div>
       <div className="mt-10">{children}</div>

@@ -34,6 +34,7 @@ El nombre que se guarda en el cliente sale de `user_metadata.name` o `full_name`
 | `/admin/projects/new` | Sesión de admin |
 | `/admin/projects/:id` | Sesión de admin |
 | `/admin/certifications` | Sesión de admin |
+| `/admin/content` | Sesión de admin |
 | `/admin/messages` | Sesión de admin |
 
 ## Datos
@@ -42,8 +43,10 @@ El panel usa el cliente de Supabase, no `/api/admin`. RLS rechaza a quien no est
 
 - Proyectos: listar, ver, crear, actualizar, eliminar. Borrar un proyecto borra la fila (cascade de imágenes y tecnologías) y los objetos del bucket cuyo `path` no sea una URL ni un path del sitio.
 - Imágenes: jpeg, png o webp, máximo 5 MB. El cliente valida el tipo y el tamaño; el bucket repite el límite. Solo una imagen por proyecto queda como portada.
-- Certificaciones: listar, crear, actualizar, eliminar.
+- Certificaciones: listar, crear, actualizar, eliminar. Subida de imagen al bucket (`certifications/{id}/…`) y campo `hours`. Lo publicado alimenta el Home.
+- Contenido del sitio (`/admin/content`): hero, about, CTA, experiencia y educación. Una sola fila en `site_content`.
 - Mensajes: listar, ver y cambiar `status` a `new`, `read` o `archived`. No se borra el mensaje.
+- Proyectos: los textos del case study (problema, solución, resultado, etc.) y las capturas ya se editan aquí; no hace falta tocar el seeder para copy.
 
 Los errores de validación siguen mostrándose junto al campo. Eliminar un proyecto pide confirmación. Lo habitual es despublicar.
 

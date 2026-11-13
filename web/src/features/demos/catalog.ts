@@ -3,41 +3,41 @@ export const demos = [
     id: 'logistics',
     path: '/demo/logistics',
     projectSlug: 'saas-logistics-platform',
-    title: 'Logistics dashboard',
+    title: 'Panel de logística',
     summary:
-      'Counts and a filterable table over the fictional shipments already stored for this portfolio.',
+      'Vista de conteos y tabla filtrable sobre envíos ficticios. Sirve para mostrar cómo se consulta el ciclo de un envío sin conectar paqueterías reales.',
   },
   {
     id: 'notifications',
     path: '/demo/notifications',
     projectSlug: 'multichannel-notifications',
-    title: 'Notification desk',
+    title: 'Mesa de notificaciones',
     summary:
-      'A list of fictional notices. Simulate send only updates the record. Nothing leaves this app.',
+      'Lista de avisos ficticios por canal. “Simular envío” solo marca el registro como enviado: no sale correo ni WhatsApp de verdad. El case study cuenta el producto completo.',
   },
   {
     id: 'tracking',
     path: '/demo/tracking',
     projectSlug: 'white-label-tracking',
-    title: 'White-label tracking',
+    title: 'Rastreo white-label',
     summary:
-      'One tracking layout. The brand, accent, and message come from a local configuration.',
+      'Un solo layout de seguimiento. Cambias marca, acento y mensaje desde configuración local para ver cómo se reutiliza la misma pantalla con distinta identidad.',
   },
   {
     id: 'support',
     path: '/demo/support',
     projectSlug: 'customer-support-desk',
-    title: 'Support desk',
+    title: 'Mesa de atención',
     summary:
-      'Pick a fictional conversation, read the thread, and change its status.',
+      'Elige una conversación ficticia, lee el hilo y cambia el estado del caso. Es el recorte de la bandeja: lista + conversación, sin WhatsApp en vivo.',
   },
   {
     id: 'legacy',
     path: '/demo/legacy',
     projectSlug: 'legacy-modernization',
-    title: 'Legacy and modern',
+    title: 'Legacy y moderno',
     summary:
-      'The same screen list, shown as a classic table and as a component-based view.',
+      'La misma lista de pantallas en vista clásica (tabla) y en vista de componentes. Ilustra una migración por partes sin apagar lo que sigue en producción.',
   },
 ] as const
 

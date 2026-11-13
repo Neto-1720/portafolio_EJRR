@@ -37,7 +37,7 @@ export function CaseStudyHero({
     <header className="grid items-end gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(16rem,0.9fr)]">
       <div>
         <p className="font-mono text-mono-label tracking-wide text-text-muted uppercase">
-          Work
+          Proyecto
         </p>
         <h1 className="mt-3 text-h1 tracking-tight text-balance text-text-primary">
           {title}
@@ -63,11 +63,11 @@ export function CaseStudyHero({
         <div className="mt-8 flex flex-wrap gap-3">
           {demo ? (
             <LinkButton to={demo.path} variant="primary">
-              Open Demo
+              Abrir demo
             </LinkButton>
           ) : null}
           <LinkButton to="/work" variant="secondary">
-            Back to Work
+            Volver a proyectos
           </LinkButton>
         </div>
       </div>

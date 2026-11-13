@@ -21,9 +21,9 @@ test('recorre home, work, un case study y una demo', async ({ page }) => {
     'Customer Support Desk',
   )
 
-  await page.getByRole('link', { name: 'Open Demo' }).first().click()
+  await page.getByRole('link', { name: 'Abrir demo' }).first().click()
   await expect(page).toHaveURL(/\/demo\/support$/)
-  await page.getByRole('link', { name: 'Back to case study' }).click()
+  await page.getByRole('link', { name: 'Volver al case study' }).click()
   await expect(page).toHaveURL(/\/work\/customer-support-desk$/)
 })
 

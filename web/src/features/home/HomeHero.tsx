@@ -1,13 +1,22 @@
+import { useCallback } from 'react'
 import { ProductPanels } from '../../assets/illustrations/ProductPanels.tsx'
+import { ErrorState } from '../../components/feedback/ErrorState.tsx'
+import { Skeleton } from '../../components/feedback/Skeleton.tsx'
 import { LinkButton } from '../../components/ui/LinkButton.tsx'
 import { profile } from '../../config/profile.ts'
+import { useRemoteData } from '../../hooks/useRemoteData.ts'
+import { getSiteContent } from '../../services/siteContent.ts'
 
 export function HomeHero() {
+  const load = useCallback((signal: AbortSignal) => getSiteContent(signal), [])
+  const { state, retry } = useRemoteData(load)
+  const content = state.status === 'ok' ? state.data : null
+
   return (
     <section className="grid items-center gap-10 md:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.85fr)] md:gap-12 lg:gap-16">
       <div>
         <p className="font-mono text-mono-label tracking-wide text-text-muted uppercase">
-          Portafolio
+          {content?.hero_eyebrow ?? 'Portafolio'}
         </p>
         <h1 className="mt-3 max-w-xl text-h1 tracking-tight text-text-primary">
           {profile.name}
@@ -16,11 +25,32 @@ export function HomeHero() {
         <p className="mt-3 font-mono text-caption text-text-muted">
           Laravel · React · TypeScript · REST APIs · SaaS
         </p>
-        <p className="mt-6 max-w-xl text-body text-text-secondary">
-          Desarrollo productos web de punta a punta, desde arquitectura backend
-          y bases de datos hasta interfaces modernas e integraciones con
-          servicios externos.
-        </p>
+        {state.status === 'loading' ? (
+          <div className="mt-6 max-w-xl space-y-3">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-4/6" />
+          </div>
+        ) : null}
+        {state.status === 'error' ? (
+          <div className="mt-6">
+            <ErrorState message={state.message} onRetry={retry} />
+          </div>
+        ) : null}
+        {content ? (
+          <>
+            {content.hero_body ? (
+              <p className="mt-6 max-w-xl text-body text-text-secondary">
+                {content.hero_body}
+              </p>
+            ) : null}
+            {content.hero_body_secondary ? (
+              <p className="mt-4 max-w-xl text-body text-text-secondary">
+                {content.hero_body_secondary}
+              </p>
+            ) : null}
+          </>
+        ) : null}
         <div className="mt-8 flex flex-wrap gap-3">
           <LinkButton to="/work" variant="primary">
             Ver proyectos

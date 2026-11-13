@@ -47,7 +47,7 @@ export function CertificationCard({
             alt={imageAlt || name}
             loading="lazy"
             decoding="async"
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            className="h-full w-full object-contain bg-surface-secondary p-3 transition duration-500 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
             onError={() => setImageFailed(true)}
           />
         ) : (
@@ -55,11 +55,8 @@ export function CertificationCard({
             <CourseCover id={id} title={name} />
           </div>
         )}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-surface/80 to-transparent" />
-        {issuer ? (
-          <span className="absolute top-3 left-3 rounded-full border border-border bg-surface/95 px-2.5 py-1 font-mono text-caption text-text-secondary shadow-sm backdrop-blur-sm">
-            {issuer}
-          </span>
+        {showImage ? (
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-surface/80 to-transparent" />
         ) : null}
       </div>
 
@@ -68,7 +65,14 @@ export function CertificationCard({
           <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-accent-soft text-accent">
             <Award className="size-3.5" aria-hidden="true" />
           </span>
-          <h3 className="text-h3 break-words text-text-primary">{name}</h3>
+          <div className="min-w-0 flex-1">
+            {issuer ? (
+              <p className="font-mono text-caption tracking-wide text-text-muted uppercase">
+                {issuer}
+              </p>
+            ) : null}
+            <h3 className="text-h3 break-words text-text-primary">{name}</h3>
+          </div>
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">

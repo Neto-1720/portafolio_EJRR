@@ -150,6 +150,13 @@ export function validateCertification(input: CertificationInput): void {
   )
   checkOptional(
     fields,
+    'hours',
+    input.hours,
+    40,
+    'Las horas son demasiado largas.',
+  )
+  checkOptional(
+    fields,
     'credential_url',
     input.credential_url,
     500,
