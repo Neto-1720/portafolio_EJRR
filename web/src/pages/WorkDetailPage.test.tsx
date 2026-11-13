@@ -96,7 +96,7 @@ describe('WorkDetailPage', () => {
     expect(
       screen.queryByText('No se pudo cargar este proyecto.'),
     ).not.toBeInTheDocument()
-    const demos = screen.getAllByRole('link', { name: 'Open Demo' })
+    const demos = screen.getAllByRole('link', { name: 'Abrir demo' })
     expect(demos.length).toBeGreaterThan(0)
     for (const link of demos) {
       expect(link).toHaveAttribute('href', '/demo/notifications')

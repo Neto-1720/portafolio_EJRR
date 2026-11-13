@@ -1,44 +1,57 @@
+import { useCallback } from 'react'
 import { CertificationCard } from '../../components/content/CertificationCard.tsx'
 import { EmptyState } from '../../components/feedback/EmptyState.tsx'
+import { ErrorState } from '../../components/feedback/ErrorState.tsx'
 import { Skeleton } from '../../components/feedback/Skeleton.tsx'
 import { Section } from '../../components/ui/Section.tsx'
 import { SectionHeader } from '../../components/ui/SectionHeader.tsx'
-import { profile } from '../../config/profile.ts'
+import { useRemoteData } from '../../hooks/useRemoteData.ts'
+import { getCertifications } from '../../services/certifications.ts'
 
 export function CertificationsSection() {
-  const certifications = profile.certifications
+  const load = useCallback(
+    (signal: AbortSignal) => getCertifications(signal),
+    [],
+  )
+  const { state, retry } = useRemoteData(load)
 
   return (
     <Section>
       <SectionHeader
         eyebrow="Cursos"
         title="Certificaciones"
-        description="Formación continua con foco en calidad, frontend y Laravel."
+        description="Cursos recientes que refuerzan lo que aplico en producto: calidad asistida por IA, React y Laravel. Las fichas y las imágenes se administran desde el panel."
       />
       <div className="mt-8">
-        {certifications.length === 0 ? (
+        {state.status === 'loading' ? <CertificationsSkeleton /> : null}
+        {state.status === 'error' ? (
+          <ErrorState message={state.message} onRetry={retry} />
+        ) : null}
+        {state.status === 'ok' && state.data.length === 0 ? (
           <EmptyState
             title="No hay certificaciones publicadas"
-            description="Cuando agregue certificaciones al perfil aparecerán aquí."
+            description="Cuando publiques certificaciones en el admin aparecerán aquí."
           />
-        ) : (
+        ) : null}
+        {state.status === 'ok' && state.data.length > 0 ? (
           <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2">
-            {certifications.map((item, index) => (
+            {state.data.map((item, index) => (
               <CertificationCard
                 key={item.id}
-                id={item.id}
-                name={item.title}
+                id={String(item.id)}
+                name={item.name}
                 issuer={item.issuer}
-                issuedAt={item.issuedAt}
+                issuedAt={formatIssuedAt(item.issued_at)}
                 hours={item.hours}
-                imageSrc={item.imageSrc}
-                imageAlt={`Portada del curso ${item.title}`}
+                href={item.credential_url}
+                imageSrc={item.image_url}
+                imageAlt={`Certificado ${item.name}`}
                 className="animate-cert-in"
                 style={{ animationDelay: `${index * 70}ms` }}
               />
             ))}
           </div>
-        )}
+        ) : null}
       </div>
     </Section>
   )
@@ -66,4 +79,33 @@ export function CertificationsSkeleton() {
       ))}
     </div>
   )
+}
+
+function formatIssuedAt(value: string | null): string | null {
+  if (!value) {
+    return null
+  }
+
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
+
+  if (!match) {
+    return value
+  }
+
+  const year = Number(match[1])
+  const month = Number(match[2])
+  const day = Number(match[3])
+  const date = new Date(Date.UTC(year, month - 1, day))
+
+  if (Number.isNaN(date.getTime())) {
+    return value
+  }
+
+  const formatted = new Intl.DateTimeFormat('es-MX', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(date)
+
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1)
 }

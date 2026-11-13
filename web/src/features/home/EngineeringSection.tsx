@@ -27,8 +27,8 @@ export function EngineeringSection() {
     <Section id="engineering" className="scroll-mt-20">
       <SectionHeader
         eyebrow="Ingeniería"
-        title="Cómo trabajo"
-        description="Áreas de práctica. Sin barras ni porcentajes."
+        title="Stack y áreas de práctica"
+        description="Herramientas que uso de verdad en backend, frontend, integraciones, datos y calidad. Sin barras ni porcentajes inventados: solo el mapa de con qué construyo."
       />
       <div className="mt-8 space-y-6">
         {state.status === 'loading' ? (

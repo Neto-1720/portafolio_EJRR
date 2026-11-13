@@ -102,17 +102,17 @@ function CaseStudy({ project }: { project: ProjectDetail }) {
         stack={stack}
         context={project.context}
       />
-      <Prose title="Problem" text={project.problem} />
-      <Prose title="My Role" text={project.responsibilities} />
-      <Prose title="Solution" text={project.solution} />
-      <Prose title="Technical Decisions" text={project.technical_decisions} />
-      <Prose title="Challenges" text={project.challenges} />
-      <Prose title="Results" text={project.results} />
-      <Prose title="Learnings" text={project.learnings} />
+      <Prose title="Problema" text={project.problem} />
+      <Prose title="Mi rol" text={project.responsibilities} />
+      <Prose title="Solución" text={project.solution} />
+      <Prose title="Decisiones técnicas" text={project.technical_decisions} />
+      <Prose title="Retos" text={project.challenges} />
+      <Prose title="Resultado" text={project.results} />
+      <Prose title="Aprendizajes" text={project.learnings} />
       {project.technologies.length > 0 ? (
         <section className="border-t border-border py-10">
           <h2 className="text-h2 tracking-tight text-text-primary">
-            Technologies
+            Tecnologías
           </h2>
           <ul className="mt-4 flex max-w-2xl flex-wrap gap-2">
             {project.technologies.map((item) => (
@@ -128,7 +128,7 @@ function CaseStudy({ project }: { project: ProjectDetail }) {
       <RelatedLegacyNote slug={project.slug} />
       <div className="border-t border-border py-10">
         <LinkButton to="/work" variant="secondary">
-          Back to Work
+          Volver a proyectos
         </LinkButton>
       </div>
     </article>
@@ -142,14 +142,16 @@ function RelatedLegacyNote({ slug }: { slug: string }) {
 
   return (
     <section className="border-t border-border py-10">
-      <h2 className="text-h2 tracking-tight text-text-primary">Related demo</h2>
+      <h2 className="text-h2 tracking-tight text-text-primary">
+        Demo relacionada
+      </h2>
       <p className="mt-4 max-w-2xl text-body text-text-secondary">
         Legacy Platform Modernization ya muestra este tipo de corte: una vista
         clásica junto a una vista de componentes. Este caso no agrega otra demo.
       </p>
       <div className="mt-6">
         <LinkButton to="/demo/legacy" variant="secondary">
-          Open the legacy demo
+          Abrir demo legacy
         </LinkButton>
       </div>
     </section>
@@ -166,14 +168,14 @@ function DemoLink({ slug }: { slug: string }) {
   return (
     <section className="border-t border-border py-10">
       <h2 className="text-h2 tracking-tight text-text-primary">
-        Interactive Demo
+        Demo interactiva
       </h2>
       <p className="mt-4 max-w-2xl text-body text-text-secondary">
-        A small working slice of this case. It uses fictional data.
+        Una porción funcionando de este caso. Usa datos ficticios.
       </p>
       <div className="mt-6">
         <LinkButton to={demo.path} variant="primary">
-          Open Demo
+          Abrir demo
         </LinkButton>
       </div>
     </section>
@@ -185,9 +187,18 @@ function Prose({ title, text }: { title: string; text: string | null }) {
     return null
   }
 
+  const paragraphs = text
+    .split(/\n\s*\n/)
+    .map((part) => part.trim())
+    .filter(Boolean)
+
   return (
     <CaseStudySection title={title}>
-      <p>{text}</p>
+      <div className="space-y-4">
+        {paragraphs.map((paragraph, index) => (
+          <p key={`${title}-${index}`}>{paragraph}</p>
+        ))}
+      </div>
     </CaseStudySection>
   )
 }

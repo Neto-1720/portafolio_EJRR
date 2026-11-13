@@ -13,7 +13,7 @@ export function Footer() {
           <div>
             <p className="text-small text-text-primary">{profile.name}</p>
             <p className="mt-1 text-caption text-text-secondary">
-              {profile.role}
+              {profile.role} · Laravel, React y TypeScript
             </p>
           </div>
         </div>

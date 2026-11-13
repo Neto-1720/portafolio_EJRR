@@ -10,9 +10,9 @@ export function ProjectOverview({
   context,
 }: ProjectOverviewProps) {
   const items = [
-    role ? { label: 'Role', value: role } : null,
+    role ? { label: 'Rol', value: role } : null,
     stack ? { label: 'Stack', value: stack } : null,
-    context ? { label: 'Context', value: context } : null,
+    context ? { label: 'Contexto', value: context } : null,
   ].filter((item) => item !== null)
 
   if (items.length === 0) {
@@ -20,8 +20,8 @@ export function ProjectOverview({
   }
 
   return (
-    <section className="border-t border-border py-10" aria-label="Overview">
-      <h2 className="text-h2 tracking-tight text-text-primary">Overview</h2>
+    <section className="border-t border-border py-10" aria-label="Resumen">
+      <h2 className="text-h2 tracking-tight text-text-primary">Resumen</h2>
       <dl className="mt-6 grid gap-4 md:grid-cols-3">
         {items.map((item) => (
           <div

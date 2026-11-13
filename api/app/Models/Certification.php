@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
     'name',
     'issuer',
     'issued_at',
+    'hours',
     'credential_url',
     'image_path',
     'sort_order',

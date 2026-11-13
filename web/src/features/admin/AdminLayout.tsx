@@ -1,4 +1,10 @@
-import { Award, FolderKanban, Inbox, LayoutDashboard } from 'lucide-react'
+import {
+  Award,
+  FileText,
+  FolderKanban,
+  Inbox,
+  LayoutDashboard,
+} from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Suspense, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router'
@@ -22,6 +28,12 @@ const links: {
     label: 'Certificaciones',
     end: false,
     icon: Award,
+  },
+  {
+    to: '/admin/content',
+    label: 'Contenido',
+    end: false,
+    icon: FileText,
   },
   { to: '/admin/messages', label: 'Mensajes', end: false, icon: Inbox },
 ]

@@ -60,3 +60,8 @@ export const MessagesPage = lazy(() =>
     default: module.MessagesPage,
   })),
 )
+export const SiteContentPage = lazy(() =>
+  import('../pages/admin/SiteContentPage.tsx').then((module) => ({
+    default: module.SiteContentPage,
+  })),
+)

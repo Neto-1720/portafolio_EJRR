@@ -29,7 +29,7 @@ export function ContactPage() {
         heading="h1"
         eyebrow="Contacto"
         title="Escríbeme"
-        description="Cuéntame del proyecto. Si dejas tu WhatsApp, te respondo por ahí."
+        description="Cuéntame de la oportunidad o del proyecto: contexto, stack y qué necesitas. Si dejas tu WhatsApp, te respondo por ahí; el número es solo para eso, no lo comparto ni lo uso para otra cosa."
       />
       <span className="mt-8 grid size-10 place-items-center rounded-lg bg-accent-soft text-accent">
         <Mail className="size-4" aria-hidden="true" />

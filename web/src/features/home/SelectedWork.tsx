@@ -7,21 +7,31 @@ import { Section } from '../../components/ui/Section.tsx'
 import { SectionHeader } from '../../components/ui/SectionHeader.tsx'
 import { useRemoteData } from '../../hooks/useRemoteData.ts'
 import { getFeaturedProjects } from '../../services/projects.ts'
+import { getSiteContent } from '../../services/siteContent.ts'
 import { imageUrl } from '../../utils/publicUrl.ts'
 
 export function SelectedWork() {
-  const load = useCallback(
+  const loadProjects = useCallback(
     (signal: AbortSignal) => getFeaturedProjects(signal),
     [],
   )
-  const { state, retry } = useRemoteData(load)
+  const loadCopy = useCallback(
+    (signal: AbortSignal) => getSiteContent(signal),
+    [],
+  )
+  const { state, retry } = useRemoteData(loadProjects)
+  const copy = useRemoteData(loadCopy)
 
   return (
     <Section>
       <SectionHeader
         eyebrow="Trabajo"
         title="Proyectos destacados"
-        description="Casos seleccionados del portafolio."
+        description={
+          copy.state.status === 'ok'
+            ? (copy.state.data.work_description ?? undefined)
+            : 'Casos publicados con historia completa: problema, decisión, solución y resultado.'
+        }
       />
       <div className="mt-8">
         {state.status === 'loading' ? (

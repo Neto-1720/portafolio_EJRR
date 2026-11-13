@@ -1,4 +1,4 @@
-import { Bot, Code2, Database, Layers3, Sparkles } from 'lucide-react'
+import { Award, Bot, Code2, Database, Layers3, Sparkles } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 const covers: Record<string, () => ReactNode> = {
@@ -9,18 +9,43 @@ const covers: Record<string, () => ReactNode> = {
 }
 
 export function CourseCover({ id, title }: { id: string; title: string }) {
-  const Cover = covers[id]
+  const Cover = covers[id] ?? covers[coverKeyFromTitle(title)]
 
   return (
     <div className="h-full w-full" aria-hidden="true">
-      {Cover ? <Cover /> : <GenericCourseCover title={title} />}
+      {Cover ? <Cover /> : <GenericCourseCover />}
     </div>
   )
 }
 
-function Shell({ badge, children }: { badge: string; children: ReactNode }) {
+function coverKeyFromTitle(title: string): string {
+  const normalized = title.trim().toLowerCase()
+
+  if (normalized.includes('ai-powered') || normalized.includes('ai powered')) {
+    return 'ai-powered-qa'
+  }
+
+  if (normalized.includes('react')) {
+    return 'react-beginners'
+  }
+
+  if (
+    normalized.includes('consumir api') ||
+    normalized.includes('servicios http')
+  ) {
+    return 'laravel-apis'
+  }
+
+  if (normalized.includes('alto nivel') || normalized.includes('advanced')) {
+    return 'laravel-advanced'
+  }
+
+  return ''
+}
+
+function Shell({ children }: { children: ReactNode }) {
   return (
-    <div className="relative flex h-full min-h-0 flex-col justify-between overflow-hidden bg-gradient-to-br from-surface-secondary via-surface to-accent-soft/40 p-4">
+    <div className="relative flex h-full min-h-0 flex-col justify-end overflow-hidden bg-gradient-to-br from-surface-secondary via-surface to-accent-soft/40 p-4">
       <div
         className="pointer-events-none absolute inset-0 opacity-70"
         style={{
@@ -28,9 +53,6 @@ function Shell({ badge, children }: { badge: string; children: ReactNode }) {
             'radial-gradient(circle at 12% 18%, color-mix(in oklab, var(--color-accent) 18%, transparent), transparent 42%), radial-gradient(circle at 88% 12%, color-mix(in oklab, var(--color-accent) 12%, transparent), transparent 36%)',
         }}
       />
-      <span className="relative w-fit rounded-full border border-border bg-surface/90 px-2.5 py-1 font-mono text-caption text-text-secondary backdrop-blur-sm">
-        {badge}
-      </span>
       <div className="relative">{children}</div>
     </div>
   )
@@ -38,7 +60,7 @@ function Shell({ badge, children }: { badge: string; children: ReactNode }) {
 
 function AiQaCover() {
   return (
-    <Shell badge="QA · IA">
+    <Shell>
       <div className="rounded-lg border border-border bg-surface/95 p-3 shadow-sm">
         <div className="flex items-center gap-2">
           <span className="grid size-8 place-items-center rounded-md bg-accent-soft text-accent">
@@ -71,7 +93,7 @@ function AiQaCover() {
 
 function ReactCover() {
   return (
-    <Shell badge="React">
+    <Shell>
       <div className="space-y-2">
         <div className="rounded-lg border border-border bg-surface/95 p-3 shadow-sm">
           <div className="flex items-center gap-2">
@@ -96,7 +118,7 @@ function ReactCover() {
 
 function LaravelApisCover() {
   return (
-    <Shell badge="Laravel · API">
+    <Shell>
       <div className="rounded-lg border border-border bg-surface/95 p-3 shadow-sm">
         <div className="flex items-center justify-between gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-md bg-accent-soft px-2 py-1 font-mono text-caption text-accent">
@@ -120,7 +142,7 @@ function LaravelApisCover() {
 
 function LaravelAdvancedCover() {
   return (
-    <Shell badge="Laravel">
+    <Shell>
       <div className="grid grid-cols-2 gap-2">
         {['Services', 'Jobs', 'Policies', 'Events'].map((label) => (
           <div
@@ -138,11 +160,17 @@ function LaravelAdvancedCover() {
   )
 }
 
-function GenericCourseCover({ title }: { title: string }) {
+function GenericCourseCover() {
   return (
-    <Shell badge="Curso">
-      <div className="rounded-lg border border-border bg-surface/95 p-3 shadow-sm">
-        <p className="line-clamp-2 text-small text-text-primary">{title}</p>
+    <Shell>
+      <div className="flex items-center gap-3 rounded-lg border border-border bg-surface/95 p-3 shadow-sm">
+        <span className="grid size-10 place-items-center rounded-md bg-accent-soft text-accent">
+          <Award className="size-5" />
+        </span>
+        <div className="min-w-0 flex-1 space-y-1.5">
+          <span className="block h-2 w-4/5 rounded-full bg-border" />
+          <span className="block h-2 w-3/5 rounded-full bg-border" />
+        </div>
       </div>
     </Shell>
   )

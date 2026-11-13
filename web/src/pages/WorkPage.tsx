@@ -25,9 +25,9 @@ function coverImage(
 
 export function WorkPage() {
   usePageMeta({
-    title: 'Projects — Ernesto Rodríguez',
+    title: 'Proyectos — Ernesto Rodríguez',
     description:
-      'Proyectos de SaaS, APIs REST e integraciones construidos con Laravel, React y TypeScript.',
+      'Case studies de SaaS, APIs REST e integraciones con Laravel, React y TypeScript: problema, solución y resultado.',
     path: '/work',
   })
   const load = useCallback((signal: AbortSignal) => getProjects(signal), [])
@@ -37,9 +37,9 @@ export function WorkPage() {
     <Section>
       <SectionHeader
         heading="h1"
-        eyebrow="Work"
-        title="Proyectos"
-        description="Casos publicados."
+        eyebrow="Trabajo"
+        title="Proyectos publicados"
+        description="Cada caso explica el problema de negocio, la decisión técnica, lo que construí y el resultado. Hay capturas anonimizadas y, en varios, una demo interactiva con datos ficticios."
       />
       <div className="mt-8">
         {state.status === 'loading' ? (

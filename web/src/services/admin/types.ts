@@ -51,8 +51,10 @@ export type AdminCertification = {
   name: string
   issuer: string | null
   issued_at: string | null
+  hours: string | null
   credential_url: string | null
   image_path: string | null
+  image_url: string | null
   sort_order: number
   is_published: boolean
 }
